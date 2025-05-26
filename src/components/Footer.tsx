@@ -1,5 +1,5 @@
 
-import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 
 export const Footer = () => {
   const scrollToSection = (sectionId: string) => {
@@ -27,7 +27,7 @@ export const Footer = () => {
                   EduElan
                 </h3>
                 <p className="text-slate-400 leading-relaxed">
-                  Premium academic solutions for BCA Data Analytics students. Professional, reliable, and results-driven educational support.
+                  Premium academic solutions for BCA Data Analytics students. Professional, reliable, and results-driven educational support for your success.
                 </p>
               </div>
               
@@ -37,28 +37,9 @@ export const Footer = () => {
                   <span>support@eduelan.com</span>
                 </div>
                 <div className="flex items-center space-x-3 text-slate-400">
-                  <Phone className="w-5 h-5 text-blue-400" />
-                  <span>+91 9876543210</span>
-                </div>
-                <div className="flex items-center space-x-3 text-slate-400">
                   <MapPin className="w-5 h-5 text-blue-400" />
-                  <span>New Delhi, India</span>
+                  <span>Serving Students Across India</span>
                 </div>
-              </div>
-
-              <div className="flex space-x-4">
-                <a href="#" className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-all duration-300 hover:scale-110">
-                  <Facebook className="w-5 h-5" />
-                </a>
-                <a href="#" className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-all duration-300 hover:scale-110">
-                  <Twitter className="w-5 h-5" />
-                </a>
-                <a href="#" className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-all duration-300 hover:scale-110">
-                  <Instagram className="w-5 h-5" />
-                </a>
-                <a href="#" className="w-10 h-10 bg-slate-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition-all duration-300 hover:scale-110">
-                  <Linkedin className="w-5 h-5" />
-                </a>
               </div>
             </div>
 
@@ -126,7 +107,7 @@ export const Footer = () => {
                   <span className="text-slate-400">Guide Arrangement</span>
                 </li>
                 <li>
-                  <span className="text-slate-400">Academic Support</span>
+                  <span className="text-slate-400">Academic Excellence Support</span>
                 </li>
               </ul>
             </div>
@@ -169,7 +150,7 @@ export const Footer = () => {
                   © 2025 EduElan. All rights reserved.
                 </p>
                 <p className="text-xs text-slate-600 mt-1">
-                  Not affiliated with Amity University. This is an independent service provider.
+                  Not affiliated with Amity University. This is an independent academic service provider.
                 </p>
               </div>
               

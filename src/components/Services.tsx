@@ -1,15 +1,30 @@
+
 import { MajorProjectCard } from "./MajorProjectCard";
 import { AssignmentPackCard } from "./AssignmentPackCard";
+import { useCart } from "@/hooks/useCart";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 export const Services = () => {
-  const handleAddToCart = (product: string, price: number) => {
-    console.log(`Adding ${product} to cart for ₹${price}`);
-    // Cart functionality will be implemented
+  const { addToCart } = useCart();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleAddToCart = async (product: string, price: number) => {
+    await addToCart(product, price);
+    toast({
+      title: "Added to Cart",
+      description: `${product} has been added to your cart.`,
+    });
   };
 
   const handleBuyNow = (product: string, price: number) => {
-    console.log(`Buy now ${product} for ₹${price}`);
-    // Direct checkout functionality will be implemented
+    navigate('/checkout', { 
+      state: { 
+        singleProduct: { name: product, price: price },
+        total: price
+      } 
+    });
   };
 
   const withoutGuideFeatures = [
@@ -86,8 +101,8 @@ export const Services = () => {
             title="Major Project (With Guide)"
             description="Complete Major Project Report + Professional Guide Arrangement + Viva Solutions"
             price={5499}
-            originalPrice={7999}
-            discount="31% OFF"
+            originalPrice={9499}
+            discount="42% OFF"
             features={withGuideFeatures}
             isWithGuide={true}
             isPremium={true}

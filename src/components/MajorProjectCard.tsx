@@ -105,7 +105,7 @@ export const MajorProjectCard = ({
             isWithGuide 
               ? 'bg-gradient-to-r from-gold-500 to-yellow-600 hover:from-gold-600 hover:to-yellow-700' 
               : 'bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800'
-          } text-white py-4 text-lg rounded-xl hover:shadow-lg transition-all duration-300`}
+          } text-white py-4 text-lg font-semibold rounded-xl hover:shadow-lg transition-all duration-300`}
         >
           Buy Now - ₹{price.toLocaleString()}
         </Button>
@@ -116,7 +116,7 @@ export const MajorProjectCard = ({
             isWithGuide 
               ? 'border-gold-500 text-gold-600 hover:bg-gold-50' 
               : 'border-blue-600 text-blue-600 hover:bg-blue-50'
-          } py-4 text-lg rounded-xl hover:shadow-lg transition-all duration-300`}
+          } py-4 text-lg font-semibold rounded-xl hover:shadow-lg transition-all duration-300`}
         >
           <ShoppingCart className="w-5 h-5 mr-2" />
           Add to Cart
@@ -129,13 +129,13 @@ export const MajorProjectCard = ({
           : 'bg-gradient-to-br from-blue-50 to-indigo-50'
       } rounded-2xl p-6`}>
         <h4 className="text-lg font-bold text-slate-900 mb-4">
-          {isWithGuide ? 'Premium Includes Everything + :' : 'What\'s Included:'}
+          {isWithGuide ? 'Premium Complete Solution Includes:' : 'What\'s Included:'}
         </h4>
         <div className="space-y-3">
           {features.map((feature, index) => (
             <div key={index} className="flex items-start gap-3">
               {isWithGuide && feature.startsWith('✨') ? (
-                <span className="text-sm">{feature}</span>
+                <span className="text-sm font-medium">{feature}</span>
               ) : (
                 <>
                   <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
