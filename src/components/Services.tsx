@@ -1,6 +1,5 @@
-
 import { Button } from "@/components/ui/button";
-import { Check } from "lucide-react";
+import { Check, Calendar, User } from "lucide-react";
 
 export const Services = () => {
   return (
