@@ -13,9 +13,11 @@ export type Database = {
         Row: {
           accessed_at: string | null
           action: string
+          details: Json | null
           id: string
           ip_address: unknown | null
           record_id: string | null
+          severity: string | null
           table_name: string
           user_agent: string | null
           user_id: string | null
@@ -24,9 +26,11 @@ export type Database = {
         Insert: {
           accessed_at?: string | null
           action: string
+          details?: Json | null
           id?: string
           ip_address?: unknown | null
           record_id?: string | null
+          severity?: string | null
           table_name: string
           user_agent?: string | null
           user_id?: string | null
@@ -35,9 +39,11 @@ export type Database = {
         Update: {
           accessed_at?: string | null
           action?: string
+          details?: Json | null
           id?: string
           ip_address?: unknown | null
           record_id?: string | null
+          severity?: string | null
           table_name?: string
           user_agent?: string | null
           user_id?: string | null
@@ -180,6 +186,27 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limits: {
+        Row: {
+          attempts: number | null
+          blocked_until: string | null
+          identifier: string
+          last_attempt: string | null
+        }
+        Insert: {
+          attempts?: number | null
+          blocked_until?: string | null
+          identifier: string
+          last_attempt?: string | null
+        }
+        Update: {
+          attempts?: number | null
+          blocked_until?: string | null
+          identifier?: string
+          last_attempt?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       admin_order_export: {
@@ -215,6 +242,22 @@ export type Database = {
         Args: { admin_email: string }
         Returns: boolean
       }
+      bootstrap_admin_secure: {
+        Args: { admin_email: string }
+        Returns: boolean
+      }
+      check_admin_permission: {
+        Args: { required_permission: string }
+        Returns: boolean
+      }
+      check_rate_limit: {
+        Args: {
+          identifier: string
+          max_attempts?: number
+          window_minutes?: number
+        }
+        Returns: boolean
+      }
       cleanup_expired_sessions: {
         Args: Record<PropertyKey, never>
         Returns: undefined
@@ -235,6 +278,15 @@ export type Database = {
         Args: { order_id: string; access_type: string }
         Returns: undefined
       }
+      log_security_event: {
+        Args: {
+          event_type: string
+          user_id?: string
+          details?: Json
+          severity?: string
+        }
+        Returns: undefined
+      }
       set_session_context: {
         Args: { parameter_name: string; parameter_value: string }
         Returns: undefined
@@ -244,6 +296,10 @@ export type Database = {
         Returns: boolean
       }
       validate_session_token: {
+        Args: { token: string }
+        Returns: boolean
+      }
+      validate_session_token_secure: {
         Args: { token: string }
         Returns: boolean
       }

@@ -1,21 +1,13 @@
 
 import { supabase } from '@/integrations/supabase/client';
+import { generateEnhancedSecureToken, setEnhancedSessionContext } from './enhancedSessionUtils';
 
-// Generate secure session token for anonymous users
+// Backward compatibility - use enhanced token generation
 export const generateSecureToken = (): string => {
-  const array = new Uint8Array(32);
-  crypto.getRandomValues(array);
-  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+  return generateEnhancedSecureToken();
 };
 
-// Set session context for RLS validation using our custom function
+// Backward compatibility - use enhanced session context
 export const setSessionContext = async (token: string): Promise<void> => {
-  try {
-    await supabase.rpc('set_session_context', {
-      parameter_name: 'request.session_token',
-      parameter_value: token
-    });
-  } catch (error) {
-    console.log('Session context not set:', error);
-  }
+  return setEnhancedSessionContext(token);
 };
