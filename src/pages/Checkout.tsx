@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "@/hooks/useCart";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,7 @@ import { ProtectedCheckout } from "@/components/ProtectedCheckout";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/components/AuthGuard";
-import { Copy, Mail, CheckCircle, Clock, Shield, Star } from "lucide-react";
+import { Copy, Mail, CheckCircle, Clock, Shield, Star, Timer } from "lucide-react";
 
 const Checkout = () => {
   const location = useLocation();
@@ -25,6 +25,8 @@ const Checkout = () => {
   
   const [isLoading, setIsLoading] = useState(false);
   const [showPaymentInstructions, setShowPaymentInstructions] = useState(false);
+  const [countdown, setCountdown] = useState(60);
+  const [orderData, setOrderData] = useState<any>(null);
 
   // Get checkout data from navigation state or current cart
   const checkoutItems = location.state?.items || [];
@@ -32,6 +34,33 @@ const Checkout = () => {
   const singleProduct = location.state?.singleProduct;
 
   const upiId = "eduelan@axl";
+
+  // Countdown timer effect
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    
+    if (showPaymentInstructions && countdown > 0) {
+      timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+    } else if (showPaymentInstructions && countdown === 0) {
+      // Redirect to payment success page with order data
+      navigate('/payment-success', { 
+        state: {
+          orderId: orderData?.orderId,
+          orderNumber: orderData?.orderNumber,
+          customerName: formData.name,
+          customerEmail: formData.email,
+          total: singleProduct ? singleProduct.price : checkoutTotal,
+          items: singleProduct ? [singleProduct] : checkoutItems
+        }
+      });
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [showPaymentInstructions, countdown, navigate, orderData, formData, singleProduct, checkoutTotal, checkoutItems]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({
@@ -78,8 +107,12 @@ const Checkout = () => {
 
       if (error) throw error;
 
-      // Show payment instructions instead of navigating
+      // Store order data for later use
+      setOrderData(data);
+      
+      // Show payment instructions and start countdown
       setShowPaymentInstructions(true);
+      setCountdown(60);
       
     } catch (error) {
       console.error('Error creating order:', error);
@@ -99,13 +132,19 @@ const Checkout = () => {
         <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
           <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto">
-              {/* Header */}
+              {/* Timer Header */}
               <div className="text-center mb-8">
-                <div className="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
-                  <CheckCircle className="w-12 h-12 text-white" />
+                <div className="w-20 h-20 bg-gradient-to-r from-red-500 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+                  <Timer className="w-12 h-12 text-white" />
                 </div>
-                <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">🎉 Almost There!</h1>
-                <p className="text-xl text-slate-600">Complete your payment to unlock premium academic success</p>
+                <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">⏰ Complete Payment Now!</h1>
+                <div className="bg-gradient-to-r from-red-100 to-orange-100 rounded-2xl p-6 border-2 border-red-300 mb-4">
+                  <div className="text-4xl font-bold text-red-700 mb-2">
+                    {Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, '0')}
+                  </div>
+                  <p className="text-lg text-red-800 font-semibold">Make payment within {countdown} seconds!</p>
+                  <p className="text-sm text-red-700 mt-2">After timer ends, you'll be redirected to get your Order ID for payment confirmation</p>
+                </div>
               </div>
 
               {/* Payment Instructions */}
@@ -154,96 +193,58 @@ const Checkout = () => {
                 </div>
               </div>
 
-              {/* Step-by-Step Instructions */}
-              <div className="bg-gradient-to-r from-amber-50 to-orange-50 rounded-3xl p-8 shadow-xl border-2 border-amber-200 mb-8">
-                <h2 className="text-2xl font-bold text-amber-900 mb-6 text-center">
-                  🚀 Complete Your Payment in 3 Simple Steps
+              {/* Urgent Instructions */}
+              <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-3xl p-8 shadow-xl border-2 border-red-200 mb-8">
+                <h2 className="text-2xl font-bold text-red-900 mb-6 text-center flex items-center justify-center gap-3">
+                  <Clock className="w-8 h-8 text-red-600 animate-pulse" />
+                  🚨 URGENT: Complete Payment in {countdown} Seconds!
                 </h2>
                 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="text-center bg-white rounded-xl p-6 shadow-lg border border-amber-200">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="text-center bg-white rounded-xl p-6 shadow-lg border border-red-200">
                     <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-xl">1</div>
-                    <h3 className="font-bold text-slate-900 mb-2">Make Payment</h3>
-                    <p className="text-sm text-slate-700">Use QR code OR UPI ID to pay ₹{(singleProduct ? singleProduct.price : checkoutTotal).toLocaleString()}</p>
+                    <h3 className="font-bold text-slate-900 mb-2">⚡ Make Payment NOW</h3>
+                    <p className="text-sm text-slate-700">Use QR code OR UPI ID to pay ₹{(singleProduct ? singleProduct.price : checkoutTotal).toLocaleString()} before timer ends!</p>
                   </div>
                   
-                  <div className="text-center bg-white rounded-xl p-6 shadow-lg border border-amber-200">
+                  <div className="text-center bg-white rounded-xl p-6 shadow-lg border border-red-200">
                     <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-xl">2</div>
-                    <h3 className="font-bold text-slate-900 mb-2">Take Screenshot</h3>
-                    <p className="text-sm text-slate-700">Capture payment receipt & this order page</p>
-                  </div>
-                  
-                  <div className="text-center bg-white rounded-xl p-6 shadow-lg border border-amber-200">
-                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-white font-bold text-xl">3</div>
-                    <h3 className="font-bold text-slate-900 mb-2">Send Email</h3>
-                    <p className="text-sm text-slate-700">Email screenshots to our support team</p>
+                    <h3 className="font-bold text-slate-900 mb-2">📸 Get Order ID</h3>
+                    <p className="text-sm text-slate-700">After timer, you'll get Order ID to screenshot with payment receipt</p>
                   </div>
                 </div>
 
-                <div className="mt-8 bg-white rounded-2xl p-6 border-2 border-red-200">
+                <div className="mt-6 bg-white rounded-2xl p-6 border-2 border-orange-200">
                   <div className="text-center">
-                    <Mail className="w-8 h-8 text-red-600 mx-auto mb-3" />
-                    <h3 className="text-lg font-bold text-red-900 mb-2">Send Payment Proof To:</h3>
+                    <Mail className="w-8 h-8 text-orange-600 mx-auto mb-3" />
+                    <h3 className="text-lg font-bold text-orange-900 mb-2">Then Email Both Screenshots To:</h3>
                     <a 
-                      href={`mailto:eduelandesk@gmail.com?subject=Payment Confirmation - Order ${formData.name}&body=Hi Team,%0A%0AI have completed the payment for my order.%0A%0ACustomer Details:%0AName: ${formData.name}%0AEmail: ${formData.email}%0AAmount: ₹${(singleProduct ? singleProduct.price : checkoutTotal).toLocaleString()}%0A%0APlease find attached:%0A1. Payment receipt screenshot%0A2. Order page screenshot%0A%0AThank you!`}
-                      className="text-xl font-bold text-red-600 hover:text-red-800 underline"
+                      href={`mailto:eduelandesk@gmail.com?subject=Payment Confirmation - Order ${formData.name}&body=Hi Team,%0A%0AI have completed the payment for my order.%0A%0ACustomer Details:%0AName: ${formData.name}%0AEmail: ${formData.email}%0AAmount: ₹${(singleProduct ? singleProduct.price : checkoutTotal).toLocaleString()}%0A%0APlease find attached:%0A1. Payment receipt screenshot%0A2. Order ID screenshot%0A%0AThank you!`}
+                      className="text-xl font-bold text-orange-600 hover:text-orange-800 underline"
                     >
                       eduelandesk@gmail.com
                     </a>
-                    <p className="text-sm text-slate-600 mt-2">Click to open pre-filled email with your details</p>
                   </div>
                 </div>
               </div>
 
-              {/* Urgency & Trust Signals */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div className="bg-gradient-to-r from-red-100 to-pink-100 rounded-2xl p-6 border-2 border-red-200">
-                  <div className="flex items-center gap-3 mb-3">
-                    <Clock className="w-6 h-6 text-red-600" />
-                    <h3 className="text-lg font-bold text-red-900">⏰ Limited Time Offer!</h3>
-                  </div>
-                  <p className="text-red-800 font-medium">This exclusive 50% discount expires soon. Complete payment now to secure your academic success!</p>
-                </div>
-
-                <div className="bg-gradient-to-r from-green-100 to-emerald-100 rounded-2xl p-6 border-2 border-green-200">
-                  <div className="flex items-center gap-3 mb-3">
-                    <Shield className="w-6 h-6 text-green-600" />
-                    <h3 className="text-lg font-bold text-green-900">🔒 100% Secure</h3>
-                  </div>
-                  <p className="text-green-800 font-medium">Trusted by 10,000+ students. Your payment is secure and your academic materials are guaranteed!</p>
-                </div>
-              </div>
-
-              {/* What You'll Get */}
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border-2 border-blue-200">
-                <h3 className="text-2xl font-bold text-blue-900 mb-6 text-center">🎯 What You'll Receive After Payment</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <Star className="w-5 h-5 text-yellow-500 fill-current" />
-                      <span className="text-slate-700">Complete project reports & assignments</span>
+              {/* FOMO Section */}
+              <div className="bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-6 border-2 border-purple-200 mb-8">
+                <div className="text-center">
+                  <h3 className="text-xl font-bold text-purple-900 mb-3">🔥 Don't Miss This Limited Offer!</h3>
+                  <p className="text-purple-800 font-medium mb-4">This exclusive 50% discount expires after payment window closes. Secure your academic success NOW!</p>
+                  <div className="flex items-center justify-center gap-6">
+                    <div className="text-center">
+                      <Star className="w-6 h-6 text-yellow-500 fill-current mx-auto mb-1" />
+                      <span className="text-sm text-purple-700">Premium Quality</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Star className="w-5 h-5 text-yellow-500 fill-current" />
-                      <span className="text-slate-700">100% plagiarism-free content</span>
+                    <div className="text-center">
+                      <Shield className="w-6 h-6 text-green-600 mx-auto mb-1" />
+                      <span className="text-sm text-purple-700">100% Guarantee</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Star className="w-5 h-5 text-yellow-500 fill-current" />
-                      <span className="text-slate-700">Professional formatting</span>
-                    </div>
-                  </div>
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <Star className="w-5 h-5 text-yellow-500 fill-current" />
-                      <span className="text-slate-700">Viva questions & answers</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Star className="w-5 h-5 text-yellow-500 fill-current" />
-                      <span className="text-slate-700">Delivery within 48-72 hours</span>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <Star className="w-5 h-5 text-yellow-500 fill-current" />
-                      <span className="text-slate-700">24/7 support & guidance</span>
+                    <div className="text-center">
+                      <CheckCircle className="w-6 h-6 text-blue-600 mx-auto mb-1" />
+                      <span className="text-sm text-purple-700">Instant Delivery</span>
                     </div>
                   </div>
                 </div>
