@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, Clock } from "lucide-react";
 
 const Contact = () => {
   return (
@@ -28,26 +28,6 @@ const Contact = () => {
                   <div>
                     <h3 className="font-semibold text-slate-900">Email</h3>
                     <p className="text-slate-600">eduelandesk@gmail.com</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                    <Phone className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-900">Phone</h3>
-                    <p className="text-slate-600">+91 9876543210</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
-                    <MapPin className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-900">Address</h3>
-                    <p className="text-slate-600">123 Education Street, Delhi, India</p>
                   </div>
                 </div>
 
