@@ -20,13 +20,13 @@ export const generateSecureSessionToken = (): string => {
   return `${payloadBase64}.${signature}`;
 };
 
-// Rate limiting check for client-side operations
+// Rate limiting check for client-side operations - FIXED parameter names
 export const checkRateLimit = async (identifier: string, maxAttempts: number = 5, windowMinutes: number = 15): Promise<boolean> => {
   try {
     const { data, error } = await supabase.rpc('check_rate_limit', {
-      identifier,
-      max_attempts: maxAttempts,
-      window_minutes: windowMinutes
+      p_identifier: identifier,
+      p_max_attempts: maxAttempts,
+      p_window_minutes: windowMinutes
     });
     
     if (error) {

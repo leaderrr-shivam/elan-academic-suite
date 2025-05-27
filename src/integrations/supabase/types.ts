@@ -203,18 +203,21 @@ export type Database = {
       }
       rate_limits: {
         Row: {
+          attempt_count: number | null
           attempts: number | null
           blocked_until: string | null
           identifier: string
           last_attempt: string | null
         }
         Insert: {
+          attempt_count?: number | null
           attempts?: number | null
           blocked_until?: string | null
           identifier: string
           last_attempt?: string | null
         }
         Update: {
+          attempt_count?: number | null
           attempts?: number | null
           blocked_until?: string | null
           identifier?: string
@@ -267,9 +270,9 @@ export type Database = {
       }
       check_rate_limit: {
         Args: {
-          identifier: string
-          max_attempts?: number
-          window_minutes?: number
+          p_identifier: string
+          p_max_attempts?: number
+          p_window_minutes?: number
         }
         Returns: boolean
       }
