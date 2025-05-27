@@ -1,9 +1,8 @@
+
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCart } from "@/hooks/useCart";
 import { Button } from "@/components/ui/button";
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
 import { ProtectedCheckout } from "@/components/ProtectedCheckout";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -100,7 +99,6 @@ const Checkout = () => {
   return (
     <ProtectedCheckout>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-        <Navigation />
         <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
@@ -242,7 +240,6 @@ const Checkout = () => {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     </ProtectedCheckout>
   );

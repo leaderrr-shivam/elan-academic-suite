@@ -86,7 +86,7 @@ const RefundPolicy = () => {
               <p className="text-slate-700">
                 For any questions or concerns, please reach out to us:
                 <br />
-                Email: <a href="mailto:support@eduelan.com" className="text-blue-600 hover:text-blue-800">support@eduelan.com</a>
+                Email: <a href="mailto:eduelandesk@gmail.com" className="text-blue-600 hover:text-blue-800">eduelandesk@gmail.com</a>
               </p>
             </div>
           </div>
