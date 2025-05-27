@@ -48,18 +48,21 @@ export type Database = {
       admin_users: {
         Row: {
           created_at: string
+          created_by: string | null
           id: string
           permissions: Json | null
           role: string
         }
         Insert: {
           created_at?: string
+          created_by?: string | null
           id: string
           permissions?: Json | null
           role?: string
         }
         Update: {
           created_at?: string
+          created_by?: string | null
           id?: string
           permissions?: Json | null
           role?: string
@@ -73,6 +76,7 @@ export type Database = {
           price: number
           product_name: string
           quantity: number
+          session_expires_at: string | null
           session_id: string
           session_token: string | null
           updated_at: string
@@ -84,6 +88,7 @@ export type Database = {
           price: number
           product_name: string
           quantity?: number
+          session_expires_at?: string | null
           session_id: string
           session_token?: string | null
           updated_at?: string
@@ -95,6 +100,7 @@ export type Database = {
           price?: number
           product_name?: string
           quantity?: number
+          session_expires_at?: string | null
           session_id?: string
           session_token?: string | null
           updated_at?: string
@@ -193,8 +199,26 @@ export type Database = {
         }
         Relationships: []
       }
+      privacy_compliance_summary: {
+        Row: {
+          guest_orders: number | null
+          recent_orders: number | null
+          redacted_orders: number | null
+          registered_customers: number | null
+          total_orders: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
+      bootstrap_admin: {
+        Args: { admin_email: string }
+        Returns: boolean
+      }
+      cleanup_expired_sessions: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       cleanup_old_cart_items: {
         Args: Record<PropertyKey, never>
         Returns: undefined
@@ -210,6 +234,14 @@ export type Database = {
       log_order_access: {
         Args: { order_id: string; access_type: string }
         Returns: undefined
+      }
+      validate_order_token: {
+        Args: { order_access_token: string }
+        Returns: boolean
+      }
+      validate_session_token: {
+        Args: { token: string }
+        Returns: boolean
       }
     }
     Enums: {

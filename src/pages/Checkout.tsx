@@ -52,59 +52,36 @@ const Checkout = () => {
     setIsLoading(true);
     
     try {
-      // Prepare order data with proper structure for the new database schema
+      // Prepare order data
       const orderData = {
-        customer_name: formData.name,
-        customer_email: formData.email,
-        customer_phone: formData.phone,
-        total_amount: singleProduct ? singleProduct.price : checkoutTotal,
-        order_status: 'completed',
-        payment_method: formData.paymentMethod,
         items: singleProduct ? [singleProduct] : checkoutItems,
-        user_id: user?.id
+        totalAmount: singleProduct ? singleProduct.price : checkoutTotal,
+        customerName: formData.name,
+        customerEmail: formData.email,
+        customerPhone: formData.phone || null
       };
 
-      // Insert order into database with UUID access token
-      const { data, error } = await supabase
-        .from('orders')
-        .insert({
-          ...orderData,
-          access_token: crypto.randomUUID() // Generate secure UUID access token
-        })
-        .select()
-        .single();
+      // Create order via edge function
+      const { data, error } = await supabase.functions.invoke('create-order', {
+        body: orderData
+      });
 
       if (error) throw error;
 
-      // Send order confirmation email
-      try {
-        await supabase.functions.invoke('send-order-confirmation', {
-          body: {
-            orderId: data.id,
-            customerName: formData.name,
-            customerEmail: formData.email,
-            totalAmount: orderData.total_amount,
-            items: orderData.items
-          }
-        });
-      } catch (emailError) {
-        console.error('Error sending confirmation email:', emailError);
-        // Don't fail the order if email fails
-      }
-
-      // Clear cart if it was a cart checkout
+      // Clear cart if it was a cart checkout (not single product)
       if (!singleProduct) {
         await clearCart();
       }
 
-      // Navigate to success page
+      // Navigate to success page with order details
       navigate('/payment-success', { 
         state: { 
-          orderId: data.id,
-          orderNumber: data.order_number,
+          orderId: data.orderId,
+          orderNumber: data.orderNumber,
+          accessToken: data.accessToken,
           customerName: formData.name,
           customerEmail: formData.email,
-          total: orderData.total_amount,
+          total: orderData.totalAmount,
           items: orderData.items
         } 
       });
@@ -254,12 +231,12 @@ const Checkout = () => {
                 </div>
 
                 <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                  <h4 className="font-semibold text-green-800 mb-2">What happens next?</h4>
+                  <h4 className="font-semibold text-green-800 mb-2">🔒 Secure & Private</h4>
                   <ul className="text-sm text-green-700 space-y-1">
-                    <li>• We'll send you an order confirmation email immediately</li>
-                    <li>• Your digital products will be delivered within 48-72 hours</li>
-                    <li>• Plagiarism report included for quality assurance</li>
-                    <li>• Our team will contact you if any clarification is needed</li>
+                    <li>• Your data is encrypted and secure</li>
+                    <li>• GDPR-compliant privacy protection</li>
+                    <li>• No data sharing with third parties</li>
+                    <li>• Complete confidentiality guaranteed</li>
                   </ul>
                 </div>
               </div>

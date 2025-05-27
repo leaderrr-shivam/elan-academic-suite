@@ -11,9 +11,11 @@ const corsHeaders = {
 
 interface OrderConfirmationRequest {
   orderId: string;
+  orderNumber?: string;
   customerName: string;
   customerEmail: string;
   totalAmount: number;
+  accessToken?: string;
   items: Array<{
     name: string;
     price: number;
@@ -27,7 +29,7 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { orderId, customerName, customerEmail, totalAmount, items }: OrderConfirmationRequest = await req.json();
+    const { orderId, orderNumber, customerName, customerEmail, totalAmount, accessToken, items }: OrderConfirmationRequest = await req.json();
 
     const itemsList = items.map(item => 
       `<li style="margin-bottom: 8px;">
@@ -35,6 +37,11 @@ const handler = async (req: Request): Promise<Response> => {
         ${item.quantity ? ` (Quantity: ${item.quantity})` : ''} - ₹${item.price.toLocaleString()}
       </li>`
     ).join('');
+
+    // Create secure order tracking link if access token is provided
+    const trackingLink = accessToken 
+      ? `${Deno.env.get("SITE_URL") || "https://eduelan.com"}/track-order?token=${accessToken}`
+      : '';
 
     const emailHtml = `
       <!DOCTYPE html>
@@ -50,6 +57,7 @@ const handler = async (req: Request): Promise<Response> => {
           .order-details { background: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0; }
           .total { font-size: 18px; font-weight: bold; color: #2563eb; }
           .security-note { background: #dbeafe; padding: 15px; border-radius: 8px; border-left: 4px solid #2563eb; margin: 20px 0; }
+          .tracking-button { display: inline-block; background: #2563eb; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 10px 0; }
         </style>
       </head>
       <body>
@@ -67,14 +75,22 @@ const handler = async (req: Request): Promise<Response> => {
             <div class="order-details">
               <h3>📋 Order Details</h3>
               <p><strong>Order ID:</strong> ${orderId}</p>
+              ${orderNumber ? `<p><strong>Order Number:</strong> ${orderNumber}</p>` : ''}
               <p><strong>Items Purchased:</strong></p>
               <ul>${itemsList}</ul>
               <p class="total">Total Amount: ₹${totalAmount.toLocaleString()}</p>
             </div>
 
+            ${trackingLink ? `
+            <div style="text-align: center; margin: 20px 0;">
+              <a href="${trackingLink}" class="tracking-button">🔍 Track Your Order</a>
+              <p style="font-size: 12px; color: #666;">Secure order tracking with your unique access token</p>
+            </div>
+            ` : ''}
+
             <div class="security-note">
               <h4>🔒 Privacy & Security</h4>
-              <p>Your personal information is encrypted and secure. We never share your data with third parties and maintain strict privacy standards for all student information.</p>
+              <p>Your personal information is encrypted and secure. We never share your data with third parties and maintain strict privacy standards for all student information. Your order is protected with a unique access token for secure tracking.</p>
             </div>
 
             <h3>📚 What's Included in Your Order:</h3>
@@ -103,7 +119,7 @@ const handler = async (req: Request): Promise<Response> => {
           </div>
           
           <div class="footer">
-            <p><small>This is an automated confirmation email. Your order details are securely stored and accessible only to you.</small></p>
+            <p><small>This is an automated confirmation email. Your order details are securely stored and accessible only to you with your unique access token.</small></p>
             <p><small>© 2025 EduElan. Committed to student privacy and academic excellence.</small></p>
           </div>
         </div>
@@ -114,7 +130,7 @@ const handler = async (req: Request): Promise<Response> => {
     const emailResponse = await resend.emails.send({
       from: "EduElan <orders@eduelan.com>",
       to: [customerEmail],
-      subject: `Order Confirmation - ${orderId} | EduElan`,
+      subject: `Order Confirmation - ${orderNumber || orderId} | EduElan`,
       html: emailHtml,
     });
 

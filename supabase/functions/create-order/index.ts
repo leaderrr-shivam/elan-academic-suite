@@ -32,36 +32,36 @@ const handler = async (req: Request): Promise<Response> => {
       { auth: { persistSession: false } }
     );
 
-    // Get authenticated user
+    // Get authenticated user (if any)
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
-      throw new Error("No authorization header");
-    }
-
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
-    );
-
-    const token = authHeader.replace("Bearer ", "");
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
+    let user = null;
     
-    if (authError || !user) {
-      throw new Error("User not authenticated");
+    if (authHeader) {
+      const supabaseClient = createClient(
+        Deno.env.get("SUPABASE_URL") ?? "",
+        Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+      );
+
+      const token = authHeader.replace("Bearer ", "");
+      const { data: { user: authUser }, error: authError } = await supabaseClient.auth.getUser(token);
+      
+      if (!authError && authUser) {
+        user = authUser;
+      }
     }
 
     const { items, totalAmount, customerName, customerEmail, customerPhone }: CreateOrderRequest = await req.json();
 
-    // Generate unique order ID and access token
-    const orderId = `EDU-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
+    // Generate unique order ID and secure access token
+    const orderId = crypto.randomUUID();
     const accessToken = crypto.randomUUID();
 
-    // Create order in database
+    // Create order in database with proper structure
     const { data: order, error: orderError } = await supabaseAdmin
       .from('orders')
       .insert({
         id: orderId,
-        user_id: user.id,
+        user_id: user?.id || null,
         total_amount: totalAmount * 100, // Convert to cents
         order_status: 'pending',
         access_token: accessToken,
@@ -78,34 +78,44 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Send confirmation email
-    const emailResponse = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-order-confirmation`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        orderId,
-        customerName,
-        customerEmail,
-        totalAmount,
-        items
-      })
-    });
+    try {
+      const emailResponse = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-order-confirmation`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderId: order.id,
+          orderNumber: order.order_number,
+          customerName,
+          customerEmail,
+          totalAmount,
+          items,
+          accessToken: accessToken
+        })
+      });
 
-    if (!emailResponse.ok) {
-      console.error("Failed to send confirmation email:", await emailResponse.text());
+      if (!emailResponse.ok) {
+        console.error("Failed to send confirmation email:", await emailResponse.text());
+      }
+    } catch (emailError) {
+      console.error("Error sending confirmation email:", emailError);
     }
 
-    // Clear user's cart
-    await supabaseAdmin
-      .from('cart_items')
-      .delete()
-      .eq('user_id', user.id);
+    // Clear user's cart if authenticated
+    if (user) {
+      await supabaseAdmin
+        .from('cart_items')
+        .delete()
+        .eq('user_id', user.id);
+    }
 
     return new Response(JSON.stringify({ 
       success: true, 
-      orderId,
+      orderId: order.id,
+      orderNumber: order.order_number,
+      accessToken: accessToken,
       message: "Order created successfully and confirmation email sent!"
     }), {
       status: 200,

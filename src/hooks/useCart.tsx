@@ -34,6 +34,18 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
   };
 
+  // Set session context for RLS validation
+  const setSessionContext = async (token: string) => {
+    try {
+      await supabase.rpc('set_config', {
+        parameter: 'request.session_token',
+        value: token
+      });
+    } catch (error) {
+      console.log('Session context not set:', error);
+    }
+  };
+
   useEffect(() => {
     if (user) {
       // For authenticated users, load their cart items
@@ -46,12 +58,19 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.setItem('secure_cart_session', token);
       }
       setSessionToken(token);
-      loadCartItems(token);
+      setSessionContext(token).then(() => {
+        loadCartItems(token);
+      });
     }
   }, [user]);
 
   const loadCartItems = async (token: string, userId?: string) => {
     try {
+      // Set session context before querying for anonymous users
+      if (!userId && token) {
+        await setSessionContext(token);
+      }
+
       let query = supabase.from('cart_items').select('*');
       
       if (userId) {
@@ -70,6 +89,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const addToCart = async (product: string, price: number) => {
     try {
+      // Set session context for anonymous users
+      if (!user && sessionToken) {
+        await setSessionContext(sessionToken);
+      }
+
       const existingItem = items.find(item => item.product_name === product);
       
       if (existingItem) {
@@ -85,7 +109,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
           insertData.user_id = user.id;
         } else {
           insertData.session_token = sessionToken;
-          insertData.session_id = 'anonymous'; // Required field
+          insertData.session_id = 'anonymous';
+          insertData.session_expires_at = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
         }
 
         const { data, error } = await supabase
@@ -104,6 +129,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const removeFromCart = async (id: string) => {
     try {
+      // Set session context for anonymous users
+      if (!user && sessionToken) {
+        await setSessionContext(sessionToken);
+      }
+
       const { error } = await supabase
         .from('cart_items')
         .delete()
@@ -123,6 +153,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     try {
+      // Set session context for anonymous users
+      if (!user && sessionToken) {
+        await setSessionContext(sessionToken);
+      }
+
       const { error } = await supabase
         .from('cart_items')
         .update({ quantity })
@@ -139,6 +174,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const clearCart = async () => {
     try {
+      // Set session context for anonymous users
+      if (!user && sessionToken) {
+        await setSessionContext(sessionToken);
+      }
+
       let query = supabase.from('cart_items').delete();
       
       if (user) {
