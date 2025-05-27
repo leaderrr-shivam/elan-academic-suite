@@ -38,11 +38,37 @@ export const Navigation = () => {
     if (window.location.pathname !== '/') {
       navigate('/', { state: { scrollTo: sectionId } });
     } else {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
+      // Enhanced scroll to section with better error handling
+      try {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          // Calculate offset to account for fixed navigation
+          const navHeight = 80; // Approximate navigation height
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - navHeight;
+          
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: 'smooth'
+          });
+        } else {
+          console.warn(`Section with id "${sectionId}" not found`);
+        }
+      } catch (error) {
+        console.error('Error scrolling to section:', error);
+        // Fallback scroll method
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
       }
     }
+    setIsOpen(false);
+  };
+
+  // Enhanced navigation with proper scroll reset
+  const handleNavigation = (path: string) => {
+    navigate(path);
     setIsOpen(false);
   };
 
@@ -52,7 +78,7 @@ export const Navigation = () => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center">
             <button
-              onClick={() => navigate('/')}
+              onClick={() => handleNavigation('/')}
               className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent"
             >
               EduElan
@@ -62,7 +88,7 @@ export const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <button
-              onClick={() => navigate('/')}
+              onClick={() => handleNavigation('/')}
               className="text-slate-600 hover:text-blue-600 font-medium transition-colors flex items-center space-x-1"
             >
               <Home className="w-4 h-4" />
@@ -93,7 +119,7 @@ export const Navigation = () => {
               FAQ
             </button>
             <button
-              onClick={() => navigate('/about')}
+              onClick={() => handleNavigation('/about')}
               className="text-slate-600 hover:text-blue-600 font-medium transition-colors"
             >
               About
@@ -117,7 +143,7 @@ export const Navigation = () => {
                   </span>
                 </div>
                 <Button
-                  onClick={() => navigate('/dashboard')}
+                  onClick={() => handleNavigation('/dashboard')}
                   variant="outline"
                   size="sm"
                   className="text-blue-600 hover:text-blue-700 border-blue-200 hover:bg-blue-50 relative group"
@@ -138,7 +164,7 @@ export const Navigation = () => {
               </div>
             ) : (
               <Button
-                onClick={() => navigate('/auth')}
+                onClick={() => handleNavigation('/auth')}
                 variant="outline"
                 className="border-blue-600 text-blue-600 hover:bg-blue-50"
               >
@@ -148,7 +174,7 @@ export const Navigation = () => {
             )}
             
             <Button
-              onClick={() => navigate('/cart')}
+              onClick={() => handleNavigation('/cart')}
               variant="outline"
               className="relative border-blue-600 text-blue-600 hover:bg-blue-50"
             >
@@ -164,7 +190,7 @@ export const Navigation = () => {
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-2">
             <Button
-              onClick={() => navigate('/cart')}
+              onClick={() => handleNavigation('/cart')}
               variant="outline"
               size="sm"
               className="relative border-blue-600 text-blue-600 hover:bg-blue-50"
@@ -209,10 +235,7 @@ export const Navigation = () => {
                     </Button>
                   </div>
                   <Button
-                    onClick={() => {
-                      navigate('/dashboard');
-                      setIsOpen(false);
-                    }}
+                    onClick={() => handleNavigation('/dashboard')}
                     className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white"
                   >
                     <LayoutDashboard className="w-4 h-4 mr-2 animate-pulse" />
@@ -221,10 +244,7 @@ export const Navigation = () => {
                 </div>
               ) : (
                 <Button
-                  onClick={() => {
-                    navigate('/auth');
-                    setIsOpen(false);
-                  }}
+                  onClick={() => handleNavigation('/auth')}
                   className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white mb-3"
                 >
                   <User className="w-4 h-4 mr-2" />
@@ -233,10 +253,7 @@ export const Navigation = () => {
               )}
               
               <button
-                onClick={() => {
-                  navigate('/');
-                  setIsOpen(false);
-                }}
+                onClick={() => handleNavigation('/')}
                 className="text-left text-slate-600 hover:text-blue-600 font-medium py-2 flex items-center space-x-2"
               >
                 <Home className="w-4 h-4" />
@@ -267,10 +284,7 @@ export const Navigation = () => {
                 FAQ
               </button>
               <button
-                onClick={() => {
-                  navigate('/about');
-                  setIsOpen(false);
-                }}
+                onClick={() => handleNavigation('/about')}
                 className="text-left text-slate-600 hover:text-blue-600 font-medium py-2"
               >
                 About
