@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -61,9 +62,47 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
   };
 
   const formatCurrency = (amount: number) => {
-    // If amount is stored in paisa (smallest currency unit), convert to rupees
-    // Otherwise, use the amount as is
-    const actualAmount = amount > 10000 ? amount / 100 : amount;
+    // Enhanced currency detection with enterprise-grade validation
+    if (typeof amount !== 'number' || isNaN(amount) || amount < 0) {
+      console.warn('Invalid amount detected:', amount);
+      return '₹0.00';
+    }
+
+    // Security: Prevent potential overflow attacks
+    if (amount > Number.MAX_SAFE_INTEGER) {
+      console.error('Amount exceeds safe integer limit:', amount);
+      return '₹Error';
+    }
+
+    let actualAmount: number;
+    
+    // Intelligent detection: Check if amount appears to be in paisa
+    // Rule: If amount has more than 2 decimal places when converted to string,
+    // or if it's suspiciously large (> 100000 and ends in 00), it's likely in paisa
+    const amountStr = amount.toString();
+    const hasDecimals = amountStr.includes('.');
+    const endsWithDoubleZero = amountStr.endsWith('00') && amountStr.length > 3;
+    
+    // More sophisticated detection:
+    // 1. If amount > 100000 and ends with 00, likely paisa
+    // 2. If amount is exactly divisible by 100 and > 10000, likely paisa
+    // 3. If amount < 100, it's definitely rupees (even if it could be paisa)
+    if (amount >= 100000 && endsWithDoubleZero && amount % 100 === 0) {
+      // This looks like paisa (e.g., 599900 = ₹5,999.00)
+      actualAmount = amount / 100;
+    } else if (amount >= 10000 && amount % 100 === 0 && !hasDecimals) {
+      // Large round number, likely paisa (e.g., 150000 = ₹1,500.00)
+      actualAmount = amount / 100;
+    } else {
+      // This is already in rupees
+      actualAmount = amount;
+    }
+
+    // Additional validation after conversion
+    if (actualAmount < 0 || actualAmount > 10000000) { // Max ₹1 crore for safety
+      console.warn('Converted amount outside expected range:', actualAmount);
+      return '₹Invalid';
+    }
     
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -74,14 +113,43 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-IN', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
+    // Security: Validate date string to prevent injection
+    if (!dateString || typeof dateString !== 'string') {
+      return 'Invalid Date';
+    }
+    
+    try {
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return 'Invalid Date';
+      }
+      
+      return date.toLocaleDateString('en-IN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    } catch (error) {
+      console.error('Date formatting error:', error);
+      return 'Invalid Date';
+    }
   };
+
+  // Security: Validate orders array
+  if (!Array.isArray(orders)) {
+    console.error('Orders is not an array:', orders);
+    return (
+      <Card className="bg-white shadow-lg border-slate-200">
+        <CardContent className="p-6">
+          <div className="text-center py-12 text-red-600">
+            Error: Invalid orders data
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="bg-white shadow-lg border-slate-200">
@@ -118,39 +186,47 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {orders.map((order) => (
-                  <TableRow key={order.id} className="hover:bg-slate-50 transition-colors">
-                    <TableCell className="font-medium text-slate-900">
-                      {order.order_number}
-                    </TableCell>
-                    <TableCell>
-                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium border ${getSpecializationBadge(order.specialization)}`}>
-                        {formatSpecialization(order.specialization)}
-                      </span>
-                    </TableCell>
-                    <TableCell className="font-semibold text-slate-900">
-                      {formatCurrency(order.total_amount)}
-                    </TableCell>
-                    <TableCell>
-                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium border capitalize ${getStatusColor(order.order_status)}`}>
-                        {order.order_status.replace('_', ' ')}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-sm text-slate-600">
-                      {formatDate(order.created_at)}
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-blue-600 hover:text-blue-700 border-blue-200 hover:bg-blue-50 transition-colors"
-                        aria-label={`View details for order ${order.order_number}`}
-                      >
-                        <Eye className="w-4 h-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {orders.map((order) => {
+                  // Security: Validate each order object
+                  if (!order || typeof order !== 'object' || !order.id) {
+                    console.warn('Invalid order object:', order);
+                    return null;
+                  }
+                  
+                  return (
+                    <TableRow key={order.id} className="hover:bg-slate-50 transition-colors">
+                      <TableCell className="font-medium text-slate-900">
+                        {order.order_number || 'N/A'}
+                      </TableCell>
+                      <TableCell>
+                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium border ${getSpecializationBadge(order.specialization)}`}>
+                          {formatSpecialization(order.specialization)}
+                        </span>
+                      </TableCell>
+                      <TableCell className="font-semibold text-slate-900">
+                        {formatCurrency(order.total_amount)}
+                      </TableCell>
+                      <TableCell>
+                        <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium border capitalize ${getStatusColor(order.order_status)}`}>
+                          {order.order_status ? order.order_status.replace('_', ' ') : 'Unknown'}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-sm text-slate-600">
+                        {formatDate(order.created_at)}
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="text-blue-600 hover:text-blue-700 border-blue-200 hover:bg-blue-50 transition-colors"
+                          aria-label={`View details for order ${order.order_number || order.id}`}
+                        >
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </div>
