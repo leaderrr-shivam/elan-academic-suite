@@ -1,4 +1,3 @@
-
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
 
@@ -21,6 +20,7 @@ interface AdminNotificationRequest {
     price: number;
     quantity?: number;
   }>;
+  adminEmail?: string; // Allow custom admin email to be passed
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -29,7 +29,10 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { orderId, orderNumber, customerName, customerEmail, customerPhone, totalAmount, items }: AdminNotificationRequest = await req.json();
+    const { orderId, orderNumber, customerName, customerEmail, customerPhone, totalAmount, items, adminEmail }: AdminNotificationRequest = await req.json();
+
+    // Use provided admin email or fall back to default
+    const targetAdminEmail = adminEmail || "admin@eduelan.com";
 
     const itemsList = items.map(item => 
       `<li style="margin-bottom: 12px; padding: 10px; background: #f8fafc; border-radius: 6px;">
@@ -129,7 +132,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send to admin email
     const emailResponse = await resend.emails.send({
       from: "EduElan Orders <orders@eduelan.com>",
-      to: ["admin@eduelan.com"], // Replace with your actual admin email
+      to: [targetAdminEmail],
       subject: `🚨 NEW ORDER #${orderNumber || orderId.slice(0, 8)} - ₹${totalAmount.toLocaleString()} - ${customerName}`,
       html: adminEmailHtml,
     });
