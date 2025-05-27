@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useAuth } from "@/components/AuthGuard";
 import { ProtectedDashboard } from "@/components/ProtectedDashboard";
@@ -8,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { User, Package, Clock, CheckCircle, Download, Eye, RefreshCw, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Json } from "@/integrations/supabase/types";
 
 interface Order {
   id: string;
@@ -17,9 +17,12 @@ interface Order {
   specialization: string;
   total_amount: number;
   order_status: string;
-  items: any[];
+  items: Json;
   created_at: string;
   payment_method: string;
+  user_id: string;
+  access_token: string;
+  customer_phone: string | null;
 }
 
 const Dashboard = () => {
