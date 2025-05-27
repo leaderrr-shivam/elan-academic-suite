@@ -9,6 +9,63 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      access_log: {
+        Row: {
+          accessed_at: string | null
+          action: string
+          id: string
+          ip_address: unknown | null
+          record_id: string | null
+          table_name: string
+          user_agent: string | null
+          user_id: string | null
+          user_type: string | null
+        }
+        Insert: {
+          accessed_at?: string | null
+          action: string
+          id?: string
+          ip_address?: unknown | null
+          record_id?: string | null
+          table_name: string
+          user_agent?: string | null
+          user_id?: string | null
+          user_type?: string | null
+        }
+        Update: {
+          accessed_at?: string | null
+          action?: string
+          id?: string
+          ip_address?: unknown | null
+          record_id?: string | null
+          table_name?: string
+          user_agent?: string | null
+          user_id?: string | null
+          user_type?: string | null
+        }
+        Relationships: []
+      }
+      admin_users: {
+        Row: {
+          created_at: string
+          id: string
+          permissions: Json | null
+          role: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          permissions?: Json | null
+          role?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          permissions?: Json | null
+          role?: string
+        }
+        Relationships: []
+      }
       cart_items: {
         Row: {
           created_at: string
@@ -17,6 +74,7 @@ export type Database = {
           product_name: string
           quantity: number
           session_id: string
+          session_token: string | null
           updated_at: string
           user_id: string | null
         }
@@ -27,6 +85,7 @@ export type Database = {
           product_name: string
           quantity?: number
           session_id: string
+          session_token?: string | null
           updated_at?: string
           user_id?: string | null
         }
@@ -37,6 +96,7 @@ export type Database = {
           product_name?: string
           quantity?: number
           session_id?: string
+          session_token?: string | null
           updated_at?: string
           user_id?: string | null
         }
@@ -51,6 +111,7 @@ export type Database = {
           customer_phone: string | null
           id: string
           items: Json
+          order_number: string | null
           order_status: string
           payment_method: string | null
           total_amount: number
@@ -65,6 +126,7 @@ export type Database = {
           customer_phone?: string | null
           id?: string
           items: Json
+          order_number?: string | null
           order_status?: string
           payment_method?: string | null
           total_amount: number
@@ -79,6 +141,7 @@ export type Database = {
           customer_phone?: string | null
           id?: string
           items?: Json
+          order_number?: string | null
           order_status?: string
           payment_method?: string | null
           total_amount?: number
@@ -90,7 +153,6 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
-          email: string | null
           full_name: string | null
           id: string
           phone: string | null
@@ -98,7 +160,6 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          email?: string | null
           full_name?: string | null
           id: string
           phone?: string | null
@@ -106,7 +167,6 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          email?: string | null
           full_name?: string | null
           id?: string
           phone?: string | null
@@ -116,11 +176,39 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      admin_order_export: {
+        Row: {
+          created_at: string | null
+          customer_email: string | null
+          customer_name: string | null
+          customer_phone: string | null
+          customer_type: string | null
+          id: string | null
+          items: Json | null
+          order_number: string | null
+          order_status: string | null
+          payment_method: string | null
+          total_amount: number | null
+          user_profile_name: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       cleanup_old_cart_items: {
         Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      cleanup_old_data: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      generate_session_token: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      log_order_access: {
+        Args: { order_id: string; access_type: string }
         Returns: undefined
       }
     }

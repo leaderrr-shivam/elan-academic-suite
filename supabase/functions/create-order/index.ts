@@ -62,9 +62,8 @@ const handler = async (req: Request): Promise<Response> => {
       .insert({
         id: orderId,
         user_id: user.id,
-        amount: totalAmount * 100, // Convert to cents
-        currency: 'inr',
-        status: 'pending',
+        total_amount: totalAmount * 100, // Convert to cents
+        order_status: 'pending',
         access_token: accessToken,
         customer_name: customerName,
         customer_email: customerEmail,

@@ -10,7 +10,7 @@ const PaymentSuccess = () => {
   const navigate = useNavigate();
   
   const orderData = location.state || {};
-  const { orderId, customerName, customerEmail, total, items } = orderData;
+  const { orderId, orderNumber, customerName, customerEmail, total, items } = orderData;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -33,8 +33,8 @@ const PaymentSuccess = () => {
                 <h2 className="text-2xl font-bold text-slate-900 mb-6">Order Details</h2>
                 <div className="space-y-4">
                   <div>
-                    <span className="text-slate-600">Order ID:</span>
-                    <span className="ml-2 font-mono text-sm bg-slate-100 px-2 py-1 rounded">{orderId?.slice(0, 8)}...</span>
+                    <span className="text-slate-600">Order Number:</span>
+                    <span className="ml-2 font-mono text-sm bg-slate-100 px-2 py-1 rounded">{orderNumber || orderId?.slice(0, 8) + '...'}</span>
                   </div>
                   <div>
                     <span className="text-slate-600">Customer:</span>
@@ -63,6 +63,14 @@ const PaymentSuccess = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Admin Notification */}
+          <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6 mb-8">
+            <h3 className="text-lg font-bold text-blue-900 mb-2">📋 Order Received</h3>
+            <p className="text-blue-800">
+              Your order has been automatically logged in our admin system. Our team will begin processing your academic materials immediately and deliver them within 48-72 hours.
+            </p>
           </div>
 
           {/* Next Steps */}

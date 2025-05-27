@@ -24,33 +24,40 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [sessionId, setSessionId] = useState<string>('');
+  const [sessionToken, setSessionToken] = useState<string>('');
   const { user } = useAuth();
+
+  // Generate secure session token for anonymous users
+  const generateSecureToken = () => {
+    const array = new Uint8Array(32);
+    crypto.getRandomValues(array);
+    return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+  };
 
   useEffect(() => {
     if (user) {
       // For authenticated users, load their cart items
       loadCartItems('', user.id);
     } else {
-      // For non-authenticated users, use session-based cart
-      let sid = localStorage.getItem('cart_session_id');
-      if (!sid) {
-        sid = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        localStorage.setItem('cart_session_id', sid);
+      // For non-authenticated users, use secure session-based cart
+      let token = localStorage.getItem('secure_cart_session');
+      if (!token || token.length < 64) {
+        token = generateSecureToken();
+        localStorage.setItem('secure_cart_session', token);
       }
-      setSessionId(sid);
-      loadCartItems(sid);
+      setSessionToken(token);
+      loadCartItems(token);
     }
   }, [user]);
 
-  const loadCartItems = async (sid: string, userId?: string) => {
+  const loadCartItems = async (token: string, userId?: string) => {
     try {
       let query = supabase.from('cart_items').select('*');
       
       if (userId) {
         query = query.eq('user_id', userId);
       } else {
-        query = query.eq('session_id', sid).is('user_id', null);
+        query = query.eq('session_token', token).is('user_id', null);
       }
 
       const { data, error } = await query;
@@ -77,7 +84,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (user) {
           insertData.user_id = user.id;
         } else {
-          insertData.session_id = sessionId;
+          insertData.session_token = sessionToken;
+          insertData.session_id = 'anonymous'; // Required field
         }
 
         const { data, error } = await supabase
@@ -136,7 +144,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (user) {
         query = query.eq('user_id', user.id);
       } else {
-        query = query.eq('session_id', sessionId);
+        query = query.eq('session_token', sessionToken);
       }
 
       const { error } = await query;

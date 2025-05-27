@@ -52,7 +52,7 @@ const Checkout = () => {
     setIsLoading(true);
     
     try {
-      // Prepare order data
+      // Prepare order data with proper structure for the new database schema
       const orderData = {
         customer_name: formData.name,
         customer_email: formData.email,
@@ -64,10 +64,13 @@ const Checkout = () => {
         user_id: user?.id
       };
 
-      // Insert order into database
+      // Insert order into database with UUID access token
       const { data, error } = await supabase
         .from('orders')
-        .insert(orderData)
+        .insert({
+          ...orderData,
+          access_token: crypto.randomUUID() // Generate secure UUID access token
+        })
         .select()
         .single();
 
@@ -98,6 +101,7 @@ const Checkout = () => {
       navigate('/payment-success', { 
         state: { 
           orderId: data.id,
+          orderNumber: data.order_number,
           customerName: formData.name,
           customerEmail: formData.email,
           total: orderData.total_amount,
