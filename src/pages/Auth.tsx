@@ -2,9 +2,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/components/AuthGuard";
+import { signInSecure, signUpSecure } from "@/services/enhancedAuthService";
 import { Mail, Lock, Eye, EyeOff, UserPlus, LogIn, Shield } from "lucide-react";
 
 const Auth = () => {
@@ -34,20 +34,8 @@ const Auth = () => {
 
     try {
       if (isLogin) {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
-        });
-
-        if (error) {
-          if (error.message.includes('Invalid login credentials')) {
-            throw new Error('Invalid email or password. Please check your credentials.');
-          } else if (error.message.includes('Email not confirmed')) {
-            throw new Error('Please check your email and click the confirmation link before signing in.');
-          }
-          throw error;
-        }
-
+        await signInSecure(email, password);
+        
         toast({
           title: "Welcome back!",
           description: "You have successfully signed in.",
@@ -57,32 +45,12 @@ const Auth = () => {
         const from = location.state?.from || '/';
         navigate(from, { replace: true });
       } else {
-        // Sign up validation
+        // Client-side validation for sign up
         if (password !== confirmPassword) {
           throw new Error("Passwords don't match");
         }
-        if (password.length < 6) {
-          throw new Error("Password must be at least 6 characters long");
-        }
 
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            data: {
-              full_name: fullName,
-            }
-          }
-        });
-
-        if (error) {
-          if (error.message.includes('User already registered')) {
-            throw new Error('An account with this email already exists. Please sign in instead.');
-          } else if (error.message.includes('Password should be')) {
-            throw new Error('Password should be at least 6 characters long.');
-          }
-          throw error;
-        }
+        await signUpSecure(email, password, fullName);
 
         toast({
           title: "Account created successfully!",

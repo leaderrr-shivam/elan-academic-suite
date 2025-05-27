@@ -1,10 +1,11 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Menu, X, User, LogOut, Shield } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthGuard";
-import { supabase } from "@/integrations/supabase/client";
+import { signOutSecure } from "@/services/enhancedAuthService";
 import { useToast } from "@/hooks/use-toast";
 
 export const Navigation = () => {
@@ -16,8 +17,7 @@ export const Navigation = () => {
 
   const handleSignOut = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      await signOutSecure();
       
       toast({
         title: "Signed Out Successfully",
