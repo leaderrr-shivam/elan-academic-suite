@@ -1,9 +1,6 @@
-
 import { useState } from "react";
 import { useCart } from "@/hooks/useCart";
 import { Button } from "@/components/ui/button";
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
 import { ShoppingCart, Plus, Minus, Trash2, Heart, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
@@ -69,7 +66,6 @@ const Cart = () => {
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-        <Navigation />
         <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto text-center animate-fade-in">
             <div className="bg-white rounded-3xl p-12 shadow-xl border border-slate-200">
@@ -96,14 +92,12 @@ const Cart = () => {
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <Navigation />
       <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 animate-fade-in">
@@ -258,7 +252,6 @@ const Cart = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
