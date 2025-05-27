@@ -16,6 +16,8 @@ import Disclaimer from './pages/Disclaimer';
 import Services from './pages/Services';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Blog from './pages/Blog';
+import Dashboard from './pages/Dashboard';
 import { AuthGuard } from './components/AuthGuard';
 import { Toaster } from "@/components/ui/toaster"
 import { CartProvider } from './hooks/useCart';
@@ -44,6 +46,8 @@ function App() {
               <Route path="/services" element={<Services />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
             <Footer />
             <Toaster />

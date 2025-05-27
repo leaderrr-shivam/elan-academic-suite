@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Menu, X, User, LogOut, Shield } from "lucide-react";
+import { ShoppingCart, Menu, X, User, LogOut, Shield, Home } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthGuard";
@@ -62,6 +62,13 @@ export const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <button
+              onClick={() => navigate('/')}
+              className="text-slate-600 hover:text-blue-600 font-medium transition-colors flex items-center space-x-1"
+            >
+              <Home className="w-4 h-4" />
+              <span>Home</span>
+            </button>
+            <button
               onClick={() => scrollToSection('services')}
               className="text-slate-600 hover:text-blue-600 font-medium transition-colors"
             >
@@ -84,6 +91,12 @@ export const Navigation = () => {
               className="text-slate-600 hover:text-blue-600 font-medium transition-colors"
             >
               FAQ
+            </button>
+            <button
+              onClick={() => navigate('/about')}
+              className="text-slate-600 hover:text-blue-600 font-medium transition-colors"
+            >
+              About
             </button>
             <button
               onClick={() => scrollToSection('contact')}
@@ -197,6 +210,16 @@ export const Navigation = () => {
               )}
               
               <button
+                onClick={() => {
+                  navigate('/');
+                  setIsOpen(false);
+                }}
+                className="text-left text-slate-600 hover:text-blue-600 font-medium py-2 flex items-center space-x-2"
+              >
+                <Home className="w-4 h-4" />
+                <span>Home</span>
+              </button>
+              <button
                 onClick={() => scrollToSection('services')}
                 className="text-left text-slate-600 hover:text-blue-600 font-medium py-2"
               >
@@ -219,6 +242,15 @@ export const Navigation = () => {
                 className="text-left text-slate-600 hover:text-blue-600 font-medium py-2"
               >
                 FAQ
+              </button>
+              <button
+                onClick={() => {
+                  navigate('/about');
+                  setIsOpen(false);
+                }}
+                className="text-left text-slate-600 hover:text-blue-600 font-medium py-2"
+              >
+                About
               </button>
               <button
                 onClick={() => scrollToSection('contact')}
