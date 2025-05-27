@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Menu, X, User, LogOut, Shield, Home } from "lucide-react";
+import { ShoppingCart, Menu, X, User, LogOut, Shield, Home, LayoutDashboard } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/components/AuthGuard";
@@ -117,6 +117,17 @@ export const Navigation = () => {
                   </span>
                 </div>
                 <Button
+                  onClick={() => navigate('/dashboard')}
+                  variant="outline"
+                  size="sm"
+                  className="text-blue-600 hover:text-blue-700 border-blue-200 hover:bg-blue-50 relative group"
+                >
+                  <LayoutDashboard className="w-4 h-4 animate-pulse" />
+                  <span className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                    Dashboard
+                  </span>
+                </Button>
+                <Button
                   onClick={handleSignOut}
                   variant="outline"
                   size="sm"
@@ -180,20 +191,32 @@ export const Navigation = () => {
           <div className="md:hidden py-4 border-t border-slate-200">
             <div className="flex flex-col space-y-3">
               {user ? (
-                <div className="flex items-center justify-between bg-blue-50 p-3 rounded-lg mb-3">
-                  <div className="flex items-center space-x-2">
-                    <Shield className="w-4 h-4 text-blue-600" />
-                    <span className="text-sm font-medium text-blue-700">
-                      {user.email?.split('@')[0]}
-                    </span>
+                <div className="flex flex-col space-y-3 bg-blue-50 p-3 rounded-lg mb-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <Shield className="w-4 h-4 text-blue-600" />
+                      <span className="text-sm font-medium text-blue-700">
+                        {user.email?.split('@')[0]}
+                      </span>
+                    </div>
+                    <Button
+                      onClick={handleSignOut}
+                      variant="outline"
+                      size="sm"
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      <LogOut className="w-4 h-4" />
+                    </Button>
                   </div>
                   <Button
-                    onClick={handleSignOut}
-                    variant="outline"
-                    size="sm"
-                    className="text-red-600 hover:text-red-700"
+                    onClick={() => {
+                      navigate('/dashboard');
+                      setIsOpen(false);
+                    }}
+                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white"
                   >
-                    <LogOut className="w-4 h-4" />
+                    <LayoutDashboard className="w-4 h-4 mr-2 animate-pulse" />
+                    View Dashboard
                   </Button>
                 </div>
               ) : (
