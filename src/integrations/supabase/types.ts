@@ -235,6 +235,10 @@ export type Database = {
         Args: { order_id: string; access_type: string }
         Returns: undefined
       }
+      set_session_context: {
+        Args: { parameter_name: string; parameter_value: string }
+        Returns: undefined
+      }
       validate_order_token: {
         Args: { order_access_token: string }
         Returns: boolean

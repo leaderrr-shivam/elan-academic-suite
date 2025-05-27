@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/components/AuthGuard';
@@ -34,12 +33,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
   };
 
-  // Set session context for RLS validation
+  // Set session context for RLS validation using our custom function
   const setSessionContext = async (token: string) => {
     try {
-      await supabase.rpc('set_config', {
-        parameter: 'request.session_token',
-        value: token
+      await supabase.rpc('set_session_context', {
+        parameter_name: 'request.session_token',
+        parameter_value: token
       });
     } catch (error) {
       console.log('Session context not set:', error);
