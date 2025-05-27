@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export const FAQ = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
