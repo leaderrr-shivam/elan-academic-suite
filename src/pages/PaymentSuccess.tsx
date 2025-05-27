@@ -10,6 +10,38 @@ const PaymentSuccess = () => {
   const orderData = location.state || {};
   const { orderId, orderNumber, customerName, customerEmail, total, items } = orderData;
 
+  const handleSupportEmailClick = () => {
+    const emailSubject = `Payment Confirmation & Order Details - Order #${orderNumber || orderId?.slice(0, 8)}`;
+    const emailBody = `Dear EdueLand Support Team,
+
+I have successfully completed my order and payment. Please find the details below:
+
+ORDER DETAILS:
+- Order Number: ${orderNumber || orderId?.slice(0, 8)}
+- Customer Name: ${customerName}
+- Email: ${customerEmail}
+- Total Amount: ₹${total?.toLocaleString()}
+
+PURCHASED ITEMS:
+${items?.map((item: any, index: number) => 
+  `${index + 1}. ${item.product_name || item.name} - ₹${(item.price * (item.quantity || 1)).toLocaleString()}`
+).join('\n') || 'Single Product Purchase'}
+
+I will attach the following screenshots with this email:
+1. Payment receipt from my payment app showing the transaction
+2. Screenshot of this order confirmation page
+
+Please confirm receipt of this email and let me know the expected delivery timeline for my academic materials.
+
+Thank you for your service!
+
+Best regards,
+${customerName}`;
+
+    const mailtoLink = `mailto:eduelandesk@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+    window.open(mailtoLink, '_blank');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
@@ -122,6 +154,22 @@ const PaymentSuccess = () => {
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 text-center">
             <h3 className="text-xl font-bold text-slate-900 mb-4">Need Help?</h3>
             <p className="text-slate-600 mb-4">Our team is here to ensure your academic success. For any questions or support:</p>
+            
+            {/* Email Support with Pre-filled Template */}
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+              <h4 className="font-semibold text-yellow-800 mb-2">📧 Important: Send Payment Confirmation</h4>
+              <p className="text-yellow-700 text-sm mb-3">
+                Click the email below to send us your payment receipt and order screenshot for faster processing.
+              </p>
+              <button
+                onClick={handleSupportEmailClick}
+                className="flex justify-center items-center space-x-2 mx-auto bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Mail className="w-5 h-5" />
+                <span className="font-medium">Send Payment Confirmation Email</span>
+              </button>
+            </div>
+            
             <div className="flex justify-center items-center space-x-2 mb-6">
               <Mail className="w-5 h-5 text-blue-600" />
               <span className="font-medium text-blue-600">eduelandesk@gmail.com</span>
