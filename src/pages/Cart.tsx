@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useCart } from "@/hooks/useCart";
 import { Button } from "@/components/ui/button";
@@ -63,6 +64,14 @@ const Cart = () => {
     navigate('/checkout', { state: { items, total: getTotalPrice() } });
   };
 
+  const handleBrowseProducts = () => {
+    navigate('/', { state: { scrollTo: 'services' } });
+  };
+
+  const handleContinueShopping = () => {
+    navigate('/', { state: { scrollTo: 'services' } });
+  };
+
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -74,7 +83,7 @@ const Cart = () => {
               <p className="text-xl text-slate-600 mb-8">Discover our amazing educational products and start your learning journey!</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 
-                  onClick={() => navigate('/#services')}
+                  onClick={handleBrowseProducts}
                   className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-8 py-4 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105"
                   size="lg"
                 >
@@ -231,7 +240,7 @@ const Cart = () => {
 
                   <Button 
                     variant="outline"
-                    onClick={() => navigate('/#services')}
+                    onClick={handleContinueShopping}
                     className="w-full text-blue-600 border-blue-600 hover:bg-blue-50 py-3 rounded-xl transition-all duration-200"
                   >
                     Continue Shopping
