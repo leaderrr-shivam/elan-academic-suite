@@ -1,6 +1,6 @@
 
 import { supabase } from '@/integrations/supabase/client';
-import { generateSecureSessionToken, logSecurityEvent } from './securityUtils';
+import { generateSecureSessionToken, logSecurityEvent, validateSessionToken } from './securityUtils';
 
 // Enhanced secure token generation with better entropy
 export const generateEnhancedSecureToken = (): string => {
@@ -29,31 +29,5 @@ export const setEnhancedSessionContext = async (token: string): Promise<void> =>
 
 // Validate session token using enhanced validation
 export const validateEnhancedSessionToken = async (token: string): Promise<boolean> => {
-  try {
-    const { data, error } = await supabase.rpc('validate_session_token_secure', {
-      token
-    });
-    
-    if (error) {
-      await logSecurityEvent('TOKEN_VALIDATION_ERROR', { 
-        error: error.message 
-      }, 'WARNING');
-      return false;
-    }
-    
-    const isValid = data === true;
-    
-    if (!isValid) {
-      await logSecurityEvent('TOKEN_VALIDATION_FAILED', { 
-        token_length: token.length 
-      }, 'WARNING');
-    }
-    
-    return isValid;
-  } catch (error) {
-    await logSecurityEvent('TOKEN_VALIDATION_EXCEPTION', { 
-      error: error instanceof Error ? error.message : 'Unknown error' 
-    }, 'CRITICAL');
-    return false;
-  }
+  return validateSessionToken(token);
 };

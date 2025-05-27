@@ -119,8 +119,11 @@ export type Database = {
           access_token: string | null
           created_at: string
           customer_email: string
+          customer_email_encrypted: string | null
           customer_name: string
+          customer_name_encrypted: string | null
           customer_phone: string | null
+          customer_phone_encrypted: string | null
           id: string
           items: Json
           order_number: string | null
@@ -134,8 +137,11 @@ export type Database = {
           access_token?: string | null
           created_at?: string
           customer_email: string
+          customer_email_encrypted?: string | null
           customer_name: string
+          customer_name_encrypted?: string | null
           customer_phone?: string | null
+          customer_phone_encrypted?: string | null
           id?: string
           items: Json
           order_number?: string | null
@@ -149,8 +155,11 @@ export type Database = {
           access_token?: string | null
           created_at?: string
           customer_email?: string
+          customer_email_encrypted?: string | null
           customer_name?: string
+          customer_name_encrypted?: string | null
           customer_phone?: string | null
+          customer_phone_encrypted?: string | null
           id?: string
           items?: Json
           order_number?: string | null
@@ -166,22 +175,28 @@ export type Database = {
         Row: {
           created_at: string
           full_name: string | null
+          full_name_encrypted: string | null
           id: string
           phone: string | null
+          phone_encrypted: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           full_name?: string | null
+          full_name_encrypted?: string | null
           id: string
           phone?: string | null
+          phone_encrypted?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           full_name?: string | null
+          full_name_encrypted?: string | null
           id?: string
           phone?: string | null
+          phone_encrypted?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -270,6 +285,14 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      decrypt_pii: {
+        Args: { encrypted_data: string }
+        Returns: string
+      }
+      encrypt_pii: {
+        Args: { data: string }
+        Returns: string
+      }
       generate_session_token: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -287,6 +310,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      safe_inet_cast: {
+        Args: { ip_string: string }
+        Returns: unknown
+      }
       set_session_context: {
         Args: { parameter_name: string; parameter_value: string }
         Returns: undefined
@@ -294,6 +321,14 @@ export type Database = {
       validate_order_token: {
         Args: { order_access_token: string }
         Returns: boolean
+      }
+      validate_security_config: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          check_name: string
+          status: string
+          recommendation: string
+        }[]
       }
       validate_session_token: {
         Args: { token: string }
