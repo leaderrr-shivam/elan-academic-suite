@@ -43,11 +43,6 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
-    
-    /* Gold colors for premium features */
-    --gold-400: 251 95% 63%;
-    --gold-500: 251 95% 58%;
-    --gold-600: 251 95% 53%;
   }
 
   .dark {
@@ -141,61 +136,4 @@
   background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-/* Gold colors for Tailwind */
-.text-gold-600 {
-  color: rgb(217, 119, 6);
-}
-
-.text-gold-500 {
-  color: rgb(245, 158, 11);
-}
-
-.bg-gold-50 {
-  background-color: rgb(255, 251, 235);
-}
-
-.bg-gold-500 {
-  background-color: rgb(245, 158, 11);
-}
-
-.bg-gold-600 {
-  background-color: rgb(217, 119, 6);
-}
-
-.border-gold-500 {
-  border-color: rgb(245, 158, 11);
-}
-
-.hover\:bg-gold-50:hover {
-  background-color: rgb(255, 251, 235);
-}
-
-.hover\:bg-gold-600:hover {
-  background-color: rgb(217, 119, 6);
-}
-
-.from-gold-400 {
-  --tw-gradient-from: rgb(251, 191, 36);
-}
-
-.to-gold-500 {
-  --tw-gradient-to: rgb(245, 158, 11);
-}
-
-.from-gold-500 {
-  --tw-gradient-from: rgb(245, 158, 11);
-}
-
-.to-yellow-600 {
-  --tw-gradient-to: rgb(202, 138, 4);
-}
-
-.hover\:from-gold-600:hover {
-  --tw-gradient-from: rgb(217, 119, 6);
-}
-
-.hover\:to-yellow-700:hover {
-  --tw-gradient-to: rgb(161, 98, 7);
 }

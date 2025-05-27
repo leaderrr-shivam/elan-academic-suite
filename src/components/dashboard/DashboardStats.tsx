@@ -64,16 +64,16 @@ export const DashboardStats = ({ stats }: DashboardStatsProps) => {
         </CardContent>
       </Card>
 
-      <Card className="bg-gradient-to-r from-gold-400 to-gold-500 text-white shadow-lg hover:shadow-xl transition-shadow">
+      <Card className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-white shadow-lg hover:shadow-xl transition-shadow border-yellow-300">
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-white/90">Membership</p>
+              <p className="text-sm font-medium text-yellow-100">Membership</p>
               <p className="text-3xl font-bold text-white">Gold</p>
             </div>
-            <User className="w-8 h-8 text-white" />
+            <User className="w-8 h-8 text-yellow-100" />
           </div>
-          <div className="mt-4 flex items-center text-sm text-white/90">
+          <div className="mt-4 flex items-center text-sm text-yellow-100">
             <User className="w-4 h-4 mr-1" />
             Premium member
           </div>

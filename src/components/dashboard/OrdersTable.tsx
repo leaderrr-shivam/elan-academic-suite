@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -62,11 +61,16 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
   };
 
   const formatCurrency = (amount: number) => {
+    // If amount is stored in paisa (smallest currency unit), convert to rupees
+    // Otherwise, use the amount as is
+    const actualAmount = amount > 10000 ? amount / 100 : amount;
+    
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
       minimumFractionDigits: 0,
-    }).format(amount);
+      maximumFractionDigits: 2,
+    }).format(actualAmount);
   };
 
   const formatDate = (dateString: string) => {
@@ -105,18 +109,18 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="min-w-[120px]">Order #</TableHead>
-                  <TableHead className="min-w-[150px]">Specialization</TableHead>
-                  <TableHead className="min-w-[100px]">Amount</TableHead>
-                  <TableHead className="min-w-[120px]">Status</TableHead>
-                  <TableHead className="min-w-[150px]">Date</TableHead>
-                  <TableHead className="min-w-[100px]">Actions</TableHead>
+                  <TableHead className="min-w-[120px] font-semibold">Order #</TableHead>
+                  <TableHead className="min-w-[150px] font-semibold">Specialization</TableHead>
+                  <TableHead className="min-w-[100px] font-semibold">Amount</TableHead>
+                  <TableHead className="min-w-[120px] font-semibold">Status</TableHead>
+                  <TableHead className="min-w-[150px] font-semibold">Date</TableHead>
+                  <TableHead className="min-w-[100px] font-semibold">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {orders.map((order) => (
-                  <TableRow key={order.id} className="hover:bg-slate-50">
-                    <TableCell className="font-medium">
+                  <TableRow key={order.id} className="hover:bg-slate-50 transition-colors">
+                    <TableCell className="font-medium text-slate-900">
                       {order.order_number}
                     </TableCell>
                     <TableCell>
@@ -124,7 +128,7 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
                         {formatSpecialization(order.specialization)}
                       </span>
                     </TableCell>
-                    <TableCell className="font-semibold">
+                    <TableCell className="font-semibold text-slate-900">
                       {formatCurrency(order.total_amount)}
                     </TableCell>
                     <TableCell>
@@ -139,7 +143,8 @@ export const OrdersTable = ({ orders }: OrdersTableProps) => {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="text-blue-600 hover:text-blue-700 border-blue-200 hover:bg-blue-50"
+                        className="text-blue-600 hover:text-blue-700 border-blue-200 hover:bg-blue-50 transition-colors"
+                        aria-label={`View details for order ${order.order_number}`}
                       >
                         <Eye className="w-4 h-4" />
                       </Button>
