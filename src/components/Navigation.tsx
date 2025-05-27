@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Menu, X, User, LogOut, Shield, Home, LayoutDashboard } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/components/AuthGuard";
 import { signOutSecure } from "@/services/enhancedAuthService";
 import { useToast } from "@/hooks/use-toast";
@@ -12,6 +12,7 @@ export const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { getItemCount } = useCart();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const { toast } = useToast();
 
@@ -62,6 +63,18 @@ export const Navigation = () => {
           element.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
       }
+    }
+    setIsOpen(false);
+  };
+
+  // Enhanced contact navigation logic
+  const handleContactNavigation = () => {
+    if (location.pathname === '/') {
+      // If on home page, scroll to contact section
+      scrollToSection('contact');
+    } else {
+      // If on any other page, navigate to contact page
+      navigate('/contact');
     }
     setIsOpen(false);
   };
@@ -125,7 +138,7 @@ export const Navigation = () => {
               About
             </button>
             <button
-              onClick={() => scrollToSection('contact')}
+              onClick={handleContactNavigation}
               className="text-slate-600 hover:text-blue-600 font-medium transition-colors"
             >
               Contact
@@ -290,7 +303,7 @@ export const Navigation = () => {
                 About
               </button>
               <button
-                onClick={() => scrollToSection('contact')}
+                onClick={handleContactNavigation}
                 className="text-left text-slate-600 hover:text-blue-600 font-medium py-2"
               >
                 Contact

@@ -1,14 +1,20 @@
-
 import { Button } from "@/components/ui/button";
 import { Users, Award, Clock, Shield } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const About = () => {
+  const navigate = useNavigate();
+  
   const stats = [
     { icon: <Users className="w-8 h-8" />, number: "5000+", label: "Happy Students" },
     { icon: <Award className="w-8 h-8" />, number: "98%", label: "Success Rate" },
     { icon: <Clock className="w-8 h-8" />, number: "24/7", label: "Support" },
     { icon: <Shield className="w-8 h-8" />, number: "100%", label: "Confidential" }
   ];
+
+  const handleGetStarted = () => {
+    navigate('/', { state: { scrollTo: 'services' } });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -32,7 +38,10 @@ const About = () => {
               <p className="text-lg text-slate-700 mb-6">
                 We understand the challenges students face in today's competitive academic environment. That's why we've built a platform that combines expert knowledge, cutting-edge technology, and personalized support to deliver exceptional results.
               </p>
-              <Button className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-8 py-3 rounded-xl hover:shadow-lg transition-all duration-300">
+              <Button 
+                onClick={handleGetStarted}
+                className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-8 py-3 rounded-xl hover:shadow-lg transition-all duration-300"
+              >
                 Get Started Today
               </Button>
             </div>
