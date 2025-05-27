@@ -77,7 +77,7 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error(`Failed to create order: ${orderError.message}`);
     }
 
-    // Send confirmation email
+    // Send confirmation email to customer
     try {
       const emailResponse = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-order-confirmation`, {
         method: 'POST',
@@ -101,6 +101,34 @@ const handler = async (req: Request): Promise<Response> => {
       }
     } catch (emailError) {
       console.error("Error sending confirmation email:", emailError);
+    }
+
+    // Send admin notification email
+    try {
+      const adminNotificationResponse = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-admin-notification`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${Deno.env.get("SUPABASE_ANON_KEY")}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderId: order.id,
+          orderNumber: order.order_number,
+          customerName,
+          customerEmail,
+          customerPhone,
+          totalAmount,
+          items
+        })
+      });
+
+      if (!adminNotificationResponse.ok) {
+        console.error("Failed to send admin notification:", await adminNotificationResponse.text());
+      } else {
+        console.log("Admin notification sent successfully");
+      }
+    } catch (adminError) {
+      console.error("Error sending admin notification:", adminError);
     }
 
     // Clear user's cart if authenticated
