@@ -17,6 +17,7 @@ interface CreateOrderRequest {
   customerName: string;
   customerEmail: string;
   customerPhone?: string;
+  specialization: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -50,13 +51,26 @@ const handler = async (req: Request): Promise<Response> => {
       }
     }
 
-    const { items, totalAmount, customerName, customerEmail, customerPhone }: CreateOrderRequest = await req.json();
+    const { items, totalAmount, customerName, customerEmail, customerPhone, specialization }: CreateOrderRequest = await req.json();
+
+    // Validate specialization
+    if (!specialization || !['cloud_security', 'data_analytics'].includes(specialization)) {
+      throw new Error('Invalid specialization provided');
+    }
 
     // Generate unique order ID and secure access token
     const orderId = crypto.randomUUID();
     const accessToken = crypto.randomUUID();
 
-    // Create order in database with proper structure
+    // Encrypt specialization for additional security
+    const { data: encryptedSpecialization, error: encryptError } = await supabaseAdmin
+      .rpc('encrypt_pii', { data: specialization });
+
+    if (encryptError) {
+      console.error('Failed to encrypt specialization:', encryptError);
+    }
+
+    // Create order in database with proper structure including specialization
     const { data: order, error: orderError } = await supabaseAdmin
       .from('orders')
       .insert({
@@ -68,6 +82,8 @@ const handler = async (req: Request): Promise<Response> => {
         customer_name: customerName,
         customer_email: customerEmail,
         customer_phone: customerPhone,
+        specialization: specialization,
+        specialization_encrypted: encryptedSpecialization,
         items: items
       })
       .select()
@@ -92,6 +108,7 @@ const handler = async (req: Request): Promise<Response> => {
           customerEmail,
           totalAmount,
           items,
+          specialization,
           accessToken: accessToken
         })
       });
@@ -103,7 +120,7 @@ const handler = async (req: Request): Promise<Response> => {
       console.error("Error sending confirmation email:", emailError);
     }
 
-    // Send admin notification email
+    // Send admin notification email with specialization info
     try {
       const adminNotificationResponse = await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/send-admin-notification`, {
         method: 'POST',
@@ -118,7 +135,8 @@ const handler = async (req: Request): Promise<Response> => {
           customerEmail,
           customerPhone,
           totalAmount,
-          items
+          items,
+          specialization
         })
       });
 

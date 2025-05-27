@@ -18,7 +18,8 @@ const Checkout = () => {
     name: user?.user_metadata?.full_name || '',
     email: user?.email || '',
     phone: '',
-    paymentMethod: 'upi'
+    paymentMethod: 'upi',
+    specialization: ''
   });
   
   const [isLoading, setIsLoading] = useState(false);
@@ -40,10 +41,10 @@ const Checkout = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email) {
+    if (!formData.name || !formData.email || !formData.specialization) {
       toast({
         title: "Missing Information",
-        description: "Please fill in all required fields.",
+        description: "Please fill in all required fields including your specialization.",
         variant: "destructive"
       });
       return;
@@ -52,13 +53,14 @@ const Checkout = () => {
     setIsLoading(true);
     
     try {
-      // Prepare order data
+      // Prepare order data with specialization
       const orderData = {
         items: singleProduct ? [singleProduct] : checkoutItems,
         totalAmount: singleProduct ? singleProduct.price : checkoutTotal,
         customerName: formData.name,
         customerEmail: formData.email,
-        customerPhone: formData.phone || null
+        customerPhone: formData.phone || null,
+        specialization: formData.specialization
       };
 
       // Create order via edge function

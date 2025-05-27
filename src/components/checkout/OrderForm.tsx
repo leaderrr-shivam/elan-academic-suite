@@ -8,6 +8,7 @@ interface OrderFormProps {
     email: string;
     phone: string;
     paymentMethod: string;
+    specialization: string;
   };
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
   handleSubmit: (e: React.FormEvent) => void;
@@ -74,6 +75,27 @@ export const OrderForm = ({
             className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             placeholder="Enter your phone number"
           />
+        </div>
+
+        <div>
+          <label htmlFor="specialization" className="block text-sm font-medium text-slate-700 mb-2">
+            Your Specialization *
+          </label>
+          <select
+            id="specialization"
+            name="specialization"
+            value={formData.specialization}
+            onChange={handleInputChange}
+            required
+            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">Select your specialization</option>
+            <option value="cloud_security">Cloud & Security</option>
+            <option value="data_analytics">Data Analytics</option>
+          </select>
+          <p className="text-sm text-slate-600 mt-1">
+            This helps us deliver the most relevant projects for your field of study.
+          </p>
         </div>
 
         <div>
