@@ -2,13 +2,43 @@
 import { supabase } from '@/integrations/supabase/client';
 import { CartItem } from '@/types/cart';
 import { setEnhancedSessionContext, validateEnhancedSessionToken } from '@/utils/enhancedSessionUtils';
-import { logSecurityEvent, checkRateLimit } from '@/utils/securityUtils';
+import { logSecurityEvent } from '@/utils/securityUtils';
+
+// Simplified rate limiting without database conflicts
+const checkSimpleRateLimit = async (key: string, maxAttempts: number): Promise<boolean> => {
+  const now = Date.now();
+  const windowKey = `${key}_${Math.floor(now / 60000)}`; // 1-minute window
+  
+  try {
+    const stored = localStorage.getItem(windowKey);
+    const attempts = stored ? parseInt(stored) : 0;
+    
+    if (attempts >= maxAttempts) {
+      return false;
+    }
+    
+    localStorage.setItem(windowKey, (attempts + 1).toString());
+    
+    // Clean up old keys
+    for (let i = 0; i < localStorage.length; i++) {
+      const storageKey = localStorage.key(i);
+      if (storageKey?.startsWith(key) && storageKey !== windowKey) {
+        localStorage.removeItem(storageKey);
+      }
+    }
+    
+    return true;
+  } catch (error) {
+    console.warn('Rate limit check failed, allowing request:', error);
+    return true;
+  }
+};
 
 export const loadCartItemsSecure = async (token: string, userId?: string): Promise<CartItem[]> => {
   try {
-    // Rate limiting for cart operations
-    const rateLimitKey = userId ? `cart_load_user:${userId}` : `cart_load_session:${token.slice(0, 10)}`;
-    if (!await checkRateLimit(rateLimitKey, 50, 1)) { // 50 requests per minute
+    // Simple rate limiting
+    const rateLimitKey = userId ? `cart_load_user_${userId}` : `cart_load_session_${token.slice(0, 10)}`;
+    if (!await checkSimpleRateLimit(rateLimitKey, 50)) {
       await logSecurityEvent('CART_LOAD_RATE_LIMITED', { 
         user_id: userId, 
         token_prefix: token.slice(0, 10) 
@@ -18,7 +48,6 @@ export const loadCartItemsSecure = async (token: string, userId?: string): Promi
 
     // Enhanced session context for anonymous users
     if (!userId && token) {
-      // Validate token first
       if (!await validateEnhancedSessionToken(token)) {
         await logSecurityEvent('CART_LOAD_INVALID_TOKEN', { 
           token_prefix: token.slice(0, 10) 
@@ -72,9 +101,9 @@ export const addCartItemSecure = async (
   userId?: string
 ): Promise<CartItem | null> => {
   try {
-    // Rate limiting for add operations
-    const rateLimitKey = userId ? `cart_add_user:${userId}` : `cart_add_session:${sessionToken.slice(0, 10)}`;
-    if (!await checkRateLimit(rateLimitKey, 20, 1)) { // 20 additions per minute
+    // Simple rate limiting
+    const rateLimitKey = userId ? `cart_add_user_${userId}` : `cart_add_session_${sessionToken.slice(0, 10)}`;
+    if (!await checkSimpleRateLimit(rateLimitKey, 20)) {
       await logSecurityEvent('CART_ADD_RATE_LIMITED', { 
         product,
         user_id: userId 
@@ -149,9 +178,9 @@ export const removeCartItemSecure = async (
   userId?: string
 ): Promise<boolean> => {
   try {
-    // Rate limiting for remove operations
-    const rateLimitKey = userId ? `cart_remove_user:${userId}` : `cart_remove_session:${sessionToken.slice(0, 10)}`;
-    if (!await checkRateLimit(rateLimitKey, 30, 1)) { // 30 removals per minute
+    // Simple rate limiting
+    const rateLimitKey = userId ? `cart_remove_user_${userId}` : `cart_remove_session_${sessionToken.slice(0, 10)}`;
+    if (!await checkSimpleRateLimit(rateLimitKey, 30)) {
       await logSecurityEvent('CART_REMOVE_RATE_LIMITED', { 
         item_id: id,
         user_id: userId 
@@ -221,9 +250,9 @@ export const updateCartItemQuantitySecure = async (
       return false;
     }
 
-    // Rate limiting for update operations
-    const rateLimitKey = userId ? `cart_update_user:${userId}` : `cart_update_session:${sessionToken.slice(0, 10)}`;
-    if (!await checkRateLimit(rateLimitKey, 40, 1)) { // 40 updates per minute
+    // Simple rate limiting
+    const rateLimitKey = userId ? `cart_update_user_${userId}` : `cart_update_session_${sessionToken.slice(0, 10)}`;
+    if (!await checkSimpleRateLimit(rateLimitKey, 40)) {
       await logSecurityEvent('CART_UPDATE_RATE_LIMITED', { 
         item_id: id,
         user_id: userId 
@@ -282,9 +311,9 @@ export const clearCartItemsSecure = async (
   userId?: string
 ): Promise<boolean> => {
   try {
-    // Rate limiting for clear operations
-    const rateLimitKey = userId ? `cart_clear_user:${userId}` : `cart_clear_session:${sessionToken.slice(0, 10)}`;
-    if (!await checkRateLimit(rateLimitKey, 5, 5)) { // 5 clears per 5 minutes
+    // Simple rate limiting
+    const rateLimitKey = userId ? `cart_clear_user_${userId}` : `cart_clear_session_${sessionToken.slice(0, 10)}`;
+    if (!await checkSimpleRateLimit(rateLimitKey, 5)) {
       await logSecurityEvent('CART_CLEAR_RATE_LIMITED', { 
         user_id: userId 
       }, 'WARNING');
