@@ -18,6 +18,7 @@ export type Database = {
           quantity: number
           session_id: string
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -27,6 +28,7 @@ export type Database = {
           quantity?: number
           session_id: string
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
@@ -36,11 +38,13 @@ export type Database = {
           quantity?: number
           session_id?: string
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
       orders: {
         Row: {
+          access_token: string | null
           created_at: string
           customer_email: string
           customer_name: string
@@ -51,8 +55,10 @@ export type Database = {
           payment_method: string | null
           total_amount: number
           updated_at: string
+          user_id: string | null
         }
         Insert: {
+          access_token?: string | null
           created_at?: string
           customer_email: string
           customer_name: string
@@ -63,8 +69,10 @@ export type Database = {
           payment_method?: string | null
           total_amount: number
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
+          access_token?: string | null
           created_at?: string
           customer_email?: string
           customer_name?: string
@@ -75,6 +83,34 @@ export type Database = {
           payment_method?: string | null
           total_amount?: number
           updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -83,7 +119,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      cleanup_old_cart_items: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

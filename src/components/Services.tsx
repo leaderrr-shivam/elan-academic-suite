@@ -4,11 +4,13 @@ import { AssignmentPackCard } from "./AssignmentPackCard";
 import { useCart } from "@/hooks/useCart";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/components/AuthGuard";
 
 export const Services = () => {
   const { addToCart } = useCart();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const handleAddToCart = async (product: string, price: number) => {
     await addToCart(product, price);
@@ -19,6 +21,16 @@ export const Services = () => {
   };
 
   const handleBuyNow = (product: string, price: number) => {
+    if (!user) {
+      navigate('/auth', { 
+        state: { 
+          from: '/checkout',
+          singleProduct: { name: product, price: price }
+        } 
+      });
+      return;
+    }
+
     navigate('/checkout', { 
       state: { 
         singleProduct: { name: product, price: price },
@@ -31,6 +43,7 @@ export const Services = () => {
     "Complete Major Project Report (100-150 pages)",
     "Strictly follows Amity University Online guidelines", 
     "Original, plagiarism-free content with proper citations",
+    "Professional plagiarism report included for quality assurance",
     "Professional formatting as per university standards",
     "Comprehensive viva questions and detailed answers",
     "Delivery in both .docx and .pdf formats",
@@ -46,6 +59,7 @@ export const Services = () => {
     "💼 Professional Guide Approval Documentation",
     "🚀 Priority Support & Faster Delivery",
     "🔥 Guaranteed Guide Acceptance",
+    "📋 Complete plagiarism report with quality certification",
     "All features from standard package included"
   ];
 
@@ -53,7 +67,7 @@ export const Services = () => {
     "Formative Assessment 1 - 10/10 marks guaranteed",
     "Formative Assessment 2 - 10/10 marks guaranteed", 
     "Formative Assessment 3 - 10/10 marks guaranteed",
-    "100% original content",
+    "100% original content with plagiarism report",
     "Instant download after payment"
   ];
 
@@ -61,7 +75,7 @@ export const Services = () => {
     "Formative Assessment 1 - 10/10 marks guaranteed",
     "Formative Assessment 2 - 10/10 marks guaranteed",
     "Formative Assessment 3 - 10/10 marks guaranteed", 
-    "100% original content",
+    "100% original content with plagiarism report",
     "Instant download after payment"
   ];
 
@@ -87,7 +101,7 @@ export const Services = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
           <MajorProjectCard
             title="Major Project (Without Guide)"
-            description="Complete Major Project Report + Viva Solutions for Final Year Submission"
+            description="Complete Major Project Report + Viva Solutions + Plagiarism Report for Final Year Submission"
             price={3499}
             originalPrice={7999}
             discount="56% OFF"
@@ -99,7 +113,7 @@ export const Services = () => {
 
           <MajorProjectCard
             title="Major Project (With Guide)"
-            description="Complete Major Project Report + Professional Guide Arrangement + Viva Solutions"
+            description="Complete Major Project Report + Professional Guide Arrangement + Viva Solutions + Plagiarism Report"
             price={5499}
             originalPrice={9499}
             discount="42% OFF"
