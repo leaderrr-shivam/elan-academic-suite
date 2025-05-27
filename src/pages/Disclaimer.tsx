@@ -97,7 +97,7 @@ const Disclaimer = () => {
               <p className="text-slate-700">
                 If you have any questions about this disclaimer, please contact us:
                 <br />
-                Email: <a href="mailto:support@eduelan.com" className="text-blue-600 hover:text-blue-800">support@eduelan.com</a>
+                Email: <a href="mailto:eduelandesk@gmail.com" className="text-blue-600 hover:text-blue-800">eduelandesk@gmail.com</a>
               </p>
             </div>
           </div>

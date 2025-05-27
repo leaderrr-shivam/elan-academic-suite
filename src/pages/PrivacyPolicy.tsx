@@ -59,7 +59,7 @@ const PrivacyPolicy = () => {
               <h2 className="text-2xl font-bold text-slate-900 mb-4">Contact Us</h2>
               <p className="text-slate-700">
                 If you have any questions about this Privacy Policy, please contact us at 
-                <a href="mailto:support@eduelan.com" className="text-blue-600 hover:text-blue-800"> support@eduelan.com</a>
+                <a href="mailto:eduelandesk@gmail.com" className="text-blue-600 hover:text-blue-800"> eduelandesk@gmail.com</a>
               </p>
             </div>
           </div>

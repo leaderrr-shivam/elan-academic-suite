@@ -124,7 +124,7 @@ const PaymentSuccess = () => {
             <p className="text-slate-600 mb-4">Our team is here to ensure your academic success. For any questions or support:</p>
             <div className="flex justify-center items-center space-x-2 mb-6">
               <Mail className="w-5 h-5 text-blue-600" />
-              <span className="font-medium text-blue-600">support@eduelan.com</span>
+              <span className="font-medium text-blue-600">eduelandesk@gmail.com</span>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
