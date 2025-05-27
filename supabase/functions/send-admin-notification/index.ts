@@ -32,7 +32,7 @@ const handler = async (req: Request): Promise<Response> => {
     const { orderId, orderNumber, customerName, customerEmail, customerPhone, totalAmount, items, adminEmail }: AdminNotificationRequest = await req.json();
 
     // Use provided admin email or fall back to default
-    const targetAdminEmail = adminEmail || "admin@eduelan.com";
+    const targetAdminEmail = adminEmail || "bbsdivinespritual@gmail.com";
 
     const itemsList = items.map(item => 
       `<li style="margin-bottom: 12px; padding: 10px; background: #f8fafc; border-radius: 6px;">
