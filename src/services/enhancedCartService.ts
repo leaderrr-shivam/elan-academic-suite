@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 import { CartItem } from '@/types/cart';
 import { setEnhancedSessionContext, validateEnhancedSessionToken } from '@/utils/enhancedSessionUtils';
@@ -127,14 +126,14 @@ export const addCartItemSecure = async (
     const insertData: any = {
       product_name: product,
       price: price,
-      quantity: 1
+      quantity: 1,
+      session_id: userId ? `user_${userId}` : 'anonymous' // Always provide session_id
     };
 
     if (userId) {
       insertData.user_id = userId;
     } else {
       insertData.session_token = sessionToken;
-      insertData.session_id = 'anonymous';
       insertData.session_expires_at = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
     }
 
