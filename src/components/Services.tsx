@@ -13,10 +13,20 @@ export const Services = () => {
   const { user } = useAuth();
 
   const handleAddToCart = async (product: string, price: number) => {
+    if (!user) {
+      navigate('/auth', { 
+        state: { 
+          from: '/#services',
+          message: 'Please sign in to add items to your cart'
+        } 
+      });
+      return;
+    }
+
     await addToCart(product, price);
     toast({
       title: "Added to Cart",
-      description: `${product} has been added to your cart.`,
+      description: `${product} has been added to your secure cart.`,
     });
   };
 
@@ -25,7 +35,8 @@ export const Services = () => {
       navigate('/auth', { 
         state: { 
           from: '/checkout',
-          singleProduct: { name: product, price: price }
+          singleProduct: { name: product, price: price },
+          message: 'Please sign in to make a secure purchase'
         } 
       });
       return;

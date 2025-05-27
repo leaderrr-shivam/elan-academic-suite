@@ -28,8 +28,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { user } = useAuth();
 
   useEffect(() => {
-    // Generate or get session ID for non-authenticated users
-    if (!user) {
+    if (user) {
+      // For authenticated users, load their cart items
+      loadCartItems('', user.id);
+    } else {
+      // For non-authenticated users, use session-based cart
       let sid = localStorage.getItem('cart_session_id');
       if (!sid) {
         sid = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -37,9 +40,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       setSessionId(sid);
       loadCartItems(sid);
-    } else {
-      // For authenticated users, load their cart items
-      loadCartItems('', user.id);
     }
   }, [user]);
 
