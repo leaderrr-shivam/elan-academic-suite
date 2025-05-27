@@ -23,7 +23,7 @@ export const AdminProtectedRoute = ({
     const checkAdminAccess = async () => {
       if (!user) {
         // Log unauthorized access attempt
-        await logSecurityEvent('ADMIN_ACCESS_ATTEMPT_UNAUTHENTICATED', undefined, {
+        await logSecurityEvent('ADMIN_ACCESS_ATTEMPT_UNAUTHENTICATED', {
           page: 'admin-settings',
           user_agent: navigator.userAgent,
           timestamp: Date.now()
@@ -39,14 +39,16 @@ export const AdminProtectedRoute = ({
         
         if (!hasPermission) {
           // Log unauthorized admin access attempt
-          await logSecurityEvent('ADMIN_ACCESS_DENIED', user.id, {
+          await logSecurityEvent('ADMIN_ACCESS_DENIED', {
+            user_id: user.id,
             page: 'admin-settings',
             required_permission: requiredPermission,
             email: user.email
           }, 'CRITICAL');
         } else {
           // Log successful admin access
-          await logSecurityEvent('ADMIN_ACCESS_GRANTED', user.id, {
+          await logSecurityEvent('ADMIN_ACCESS_GRANTED', {
+            user_id: user.id,
             page: 'admin-settings',
             permission: requiredPermission
           }, 'INFO');
@@ -55,7 +57,8 @@ export const AdminProtectedRoute = ({
         setIsAdmin(hasPermission);
       } catch (error) {
         console.error('Error checking admin permissions:', error);
-        await logSecurityEvent('ADMIN_PERMISSION_CHECK_ERROR', user.id, {
+        await logSecurityEvent('ADMIN_PERMISSION_CHECK_ERROR', {
+          user_id: user.id,
           error: error instanceof Error ? error.message : 'Unknown error'
         }, 'CRITICAL');
         setIsAdmin(false);

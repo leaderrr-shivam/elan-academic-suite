@@ -21,7 +21,8 @@ const AdminSettings = () => {
   useEffect(() => {
     const logPageAccess = async () => {
       if (user) {
-        await logSecurityEvent('ADMIN_SETTINGS_PAGE_ACCESSED', user.id, {
+        await logSecurityEvent('ADMIN_SETTINGS_PAGE_ACCESSED', {
+          user_id: user.id,
           timestamp: Date.now(),
           user_email: user.email
         }, 'INFO');
@@ -33,7 +34,8 @@ const AdminSettings = () => {
 
   const handleGetEmail = async () => {
     if (user) {
-      await logSecurityEvent('ADMIN_EMAIL_CONFIG_INITIATED', user.id, {
+      await logSecurityEvent('ADMIN_EMAIL_CONFIG_INITIATED', {
+        user_id: user.id,
         timestamp: Date.now()
       }, 'INFO');
     }
@@ -44,7 +46,8 @@ const AdminSettings = () => {
     e.preventDefault();
     
     if (!adminEmail || !adminEmail.includes('@')) {
-      await logSecurityEvent('ADMIN_EMAIL_UPDATE_INVALID', user?.id, {
+      await logSecurityEvent('ADMIN_EMAIL_UPDATE_INVALID', {
+        user_id: user?.id,
         attempted_email: adminEmail,
         error: 'Invalid email format'
       }, 'WARNING');
@@ -61,7 +64,8 @@ const AdminSettings = () => {
 
     try {
       // Log the update attempt
-      await logSecurityEvent('ADMIN_EMAIL_UPDATE_ATTEMPT', user?.id, {
+      await logSecurityEvent('ADMIN_EMAIL_UPDATE_ATTEMPT', {
+        user_id: user?.id,
         new_email: adminEmail,
         timestamp: Date.now()
       }, 'INFO');
@@ -73,7 +77,8 @@ const AdminSettings = () => {
       if (error) throw error;
 
       // Log successful update
-      await logSecurityEvent('ADMIN_EMAIL_UPDATE_SUCCESS', user?.id, {
+      await logSecurityEvent('ADMIN_EMAIL_UPDATE_SUCCESS', {
+        user_id: user?.id,
         new_email: adminEmail,
         timestamp: Date.now()
       }, 'INFO');
@@ -89,7 +94,8 @@ const AdminSettings = () => {
       console.error('Error updating admin settings:', error);
       
       // Log the error
-      await logSecurityEvent('ADMIN_EMAIL_UPDATE_ERROR', user?.id, {
+      await logSecurityEvent('ADMIN_EMAIL_UPDATE_ERROR', {
+        user_id: user?.id,
         error: error.message,
         attempted_email: adminEmail
       }, 'CRITICAL');
