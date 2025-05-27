@@ -1,14 +1,10 @@
 
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 
 const TermsConditions = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <Navigation />
-      
       <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
@@ -102,8 +98,6 @@ const TermsConditions = () => {
           </div>
         </div>
       </div>
-      
-      <Footer />
     </div>
   );
 };

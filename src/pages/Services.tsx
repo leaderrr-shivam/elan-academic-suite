@@ -1,6 +1,4 @@
 
-import { Navigation } from "@/components/Navigation";
-import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Code, FileText, Users, Award, Clock } from "lucide-react";
 
@@ -46,7 +44,6 @@ const Services = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <Navigation />
       <div className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
@@ -85,7 +82,6 @@ const Services = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
