@@ -12,28 +12,31 @@ import PaymentSuccess from './pages/PaymentSuccess';
 import { AuthGuard } from './components/AuthGuard';
 import { Toaster } from "@/components/ui/toaster"
 import AdminSettings from './components/AdminSettings';
+import { CartProvider } from './hooks/useCart';
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <div className="min-h-screen bg-gray-50">
-          <Navigation />
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/login" element={<Auth />} />
-            <Route path="/signup" element={<Auth />} />
-            <Route path="/payment-success" element={<PaymentSuccess />} />
-            <Route path="/admin-settings" element={<AdminSettings />} />
-          </Routes>
-          <Footer />
-          <Toaster />
-        </div>
-      </BrowserRouter>
+      <CartProvider>
+        <BrowserRouter>
+          <div className="min-h-screen bg-gray-50">
+            <Navigation />
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/login" element={<Auth />} />
+              <Route path="/signup" element={<Auth />} />
+              <Route path="/payment-success" element={<PaymentSuccess />} />
+              <Route path="/admin-settings" element={<AdminSettings />} />
+            </Routes>
+            <Footer />
+            <Toaster />
+          </div>
+        </BrowserRouter>
+      </CartProvider>
     </QueryClientProvider>
   );
 }
