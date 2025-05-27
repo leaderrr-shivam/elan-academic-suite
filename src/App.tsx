@@ -9,6 +9,13 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Auth from './pages/Auth';
 import PaymentSuccess from './pages/PaymentSuccess';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import RefundPolicy from './pages/RefundPolicy';
+import TermsConditions from './pages/TermsConditions';
+import Disclaimer from './pages/Disclaimer';
+import Services from './pages/Services';
+import About from './pages/About';
+import Contact from './pages/Contact';
 import { AuthGuard } from './components/AuthGuard';
 import { Toaster } from "@/components/ui/toaster"
 import { CartProvider } from './hooks/useCart';
@@ -26,9 +33,17 @@ function App() {
               <Route path="/" element={<Index />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route path="/auth" element={<Auth />} />
               <Route path="/login" element={<Auth />} />
               <Route path="/signup" element={<Auth />} />
               <Route path="/payment-success" element={<PaymentSuccess />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/refund-policy" element={<RefundPolicy />} />
+              <Route path="/terms-conditions" element={<TermsConditions />} />
+              <Route path="/disclaimer" element={<Disclaimer />} />
+              <Route path="/services" element={<Services />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
             </Routes>
             <Footer />
             <Toaster />

@@ -97,8 +97,6 @@ const TermsConditions = () => {
                 For questions about these Terms & Conditions, please contact us:
                 <br />
                 Email: <a href="mailto:support@eduelan.com" className="text-blue-600 hover:text-blue-800">support@eduelan.com</a>
-                <br />
-                Phone: +91 9876543210
               </p>
             </div>
           </div>

@@ -39,7 +39,7 @@ export const Testimonials = () => {
     {
       name: "Kavya R.",
       role: "BCA Data Analytics Graduate",
-      content: "Both assignment packs for semester 6 were excellent. Consistent 10/10 marks and professional presentation. Academia Solutions is the best!",
+      content: "Both assignment packs for semester 6 were excellent. Consistent 10/10 marks and professional presentation. EduElan is the best!",
       rating: "Assignment Pack",
       initial: "K"
     }
