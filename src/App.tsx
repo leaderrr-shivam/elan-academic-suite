@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -13,6 +12,7 @@ import { AuthGuard } from './components/AuthGuard';
 import { Toaster } from "@/components/ui/toaster"
 import AdminSettings from './components/AdminSettings';
 import { CartProvider } from './hooks/useCart';
+import { AdminProtectedRoute } from './components/AdminProtectedRoute';
 
 const queryClient = new QueryClient();
 
@@ -30,7 +30,14 @@ function App() {
               <Route path="/login" element={<Auth />} />
               <Route path="/signup" element={<Auth />} />
               <Route path="/payment-success" element={<PaymentSuccess />} />
-              <Route path="/admin-settings" element={<AdminSettings />} />
+              <Route 
+                path="/admin-settings" 
+                element={
+                  <AdminProtectedRoute requiredPermission="can_manage_products">
+                    <AdminSettings />
+                  </AdminProtectedRoute>
+                } 
+              />
             </Routes>
             <Footer />
             <Toaster />
