@@ -8,38 +8,41 @@ const Pricing = () => {
   const plans = [
     {
       name: "Assignment Pack",
-      price: "₹2,999",
+      price: "₹499",
       description: "Perfect for individual assignments",
       features: [
         "Single assignment solution",
         "Plagiarism-free content",
-        "48-72 hour delivery",
+        "24 hour delivery",
         "Email support"
       ]
     },
     {
-      name: "Major Project",
-      price: "₹9,999",
+      name: "Major Project (Without Guide)",
+      price: "₹7,999",
       description: "Complete project with documentation",
       features: [
         "Full project development",
         "Complete documentation",
         "Viva preparation materials",
         "Technical support",
+        "24 hour delivery",
         "Multiple revisions"
       ],
       popular: true
     },
     {
-      name: "Semester Bundle",
-      price: "₹19,999",
-      description: "All assignments for the semester",
+      name: "Major Project (With Guide)",
+      price: "₹10,999",
+      description: "Complete solution with guide arrangement",
       features: [
-        "All semester assignments",
+        "All features from standard package",
+        "Professional guide arrangement",
+        "Direct guide communication",
+        "Guide approval documentation",
         "Priority support",
-        "Fastest delivery",
-        "Unlimited revisions",
-        "Direct consultation"
+        "24 hour delivery",
+        "Unlimited revisions"
       ]
     }
   ];

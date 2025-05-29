@@ -8,16 +8,16 @@ export const FAQ = () => {
 
   const faqs = [
     {
-      question: "What's included in the Major Project package for ₹3499?",
-      answer: "The Major Project (Without Guide) package includes a complete 100-150 page report, professional formatting as per Amity University Online guidelines, comprehensive viva questions with detailed answers, technical documentation and code (if applicable), abstract, literature review, methodology & conclusion, and delivery in both .docx and .pdf formats. All content is 100% original and plagiarism-free. This is your smartest investment in academic success!"
+      question: "What's included in the Major Project package for ₹7,999?",
+      answer: "The Major Project (Without Guide) package includes a complete 100-150 page report, professional formatting as per Amity University Online guidelines, comprehensive viva questions with detailed answers, technical documentation and code (if applicable), abstract, literature review, methodology & conclusion, and delivery in both .docx and .pdf formats. All content is 100% original and plagiarism-free with 24-hour delivery. This is your smartest investment in academic success!"
     },
     {
-      question: "What's the difference between ₹3499 and ₹5499 Major Project packages?",
-      answer: "The ₹3499 package includes the complete project report and viva solutions - you arrange your own guide. The ₹5499 Premium package includes everything PLUS professional guide arrangement, direct communication with assigned faculty mentor, guide coordination, approval documentation, and guaranteed guide acceptance. It's a complete end-to-end solution for your academic success."
+      question: "What's the difference between ₹7,999 and ₹10,999 Major Project packages?",
+      answer: "The ₹7,999 package includes the complete project report and viva solutions - you arrange your own guide. The ₹10,999 Premium package includes everything PLUS professional guide arrangement, direct communication with assigned faculty mentor, guide coordination, approval documentation, and guaranteed guide acceptance. It's a complete end-to-end solution for your academic success with 24-hour delivery."
     },
     {
       question: "How quickly will I receive my Major Project report?",
-      answer: "We deliver Major Project reports within 48-72 hours after payment confirmation. Our expert team works efficiently to ensure you receive high-quality, submission-ready work within the promised timeframe. Your academic success is our priority, and we never compromise on quality for speed."
+      answer: "We deliver Major Project reports within 24 hours after payment confirmation. Our expert team works efficiently to ensure you receive high-quality, submission-ready work within the promised timeframe. Your academic success is our priority, and we never compromise on quality for speed."
     },
     {
       question: "Are the assignment packs guaranteed for 10/10 marks?",
@@ -28,7 +28,7 @@ export const FAQ = () => {
       answer: "Yes! Every piece of content is created from scratch by our expert team with years of experience in academic writing. We ensure zero plagiarism and provide proper citations where required. Each project and assignment is unique, tailored to meet Amity University's standards, and designed to showcase your academic excellence."
     },
     {
-      question: "How does the guide arrangement work in the ₹5499 package?",
+      question: "How does the guide arrangement work in the ₹10,999 package?",
       answer: "Our Premium package includes professional guide arrangement where we connect you with qualified faculty mentors who are familiar with Amity University's requirements. We handle all coordination, set up direct communication channels, provide approval documentation, and guarantee guide acceptance. This eliminates the stress of finding and convincing a guide yourself."
     },
     {
@@ -37,7 +37,7 @@ export const FAQ = () => {
     },
     {
       question: "Why should I invest in EduElan's services?",
-      answer: "Investing in EduElan means investing in your future. Our services ensure you graduate with excellent grades, save countless hours of stress, and get professionally crafted content that meets industry standards. With our guaranteed results, expert support, and affordable pricing, you're not just buying assignments - you're securing your academic success and career prospects."
+      answer: "Investing in EduElan means investing in your future. Our services ensure you graduate with excellent grades, save countless hours of stress, and get professionally crafted content that meets industry standards. With our guaranteed results, expert support, fast 24-hour delivery, and affordable pricing, you're not just buying assignments - you're securing your academic success and career prospects."
     }
   ];
 

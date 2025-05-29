@@ -87,7 +87,7 @@ export const MajorProjectCard = ({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="text-center">
             <Calendar className="w-8 h-8 mx-auto mb-2 text-blue-600" />
-            <p className="text-sm text-slate-600 font-medium">48-72 Hours</p>
+            <p className="text-sm text-slate-600 font-medium">24 Hours</p>
             <p className="text-xs text-slate-500">After Payment</p>
           </div>
           <div className="text-center">

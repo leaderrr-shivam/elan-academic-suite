@@ -113,8 +113,8 @@ export const Services = () => {
           <MajorProjectCard
             title="Major Project (Without Guide)"
             description="Complete Major Project Report + Viva Solutions + Plagiarism Report for Final Year Submission"
-            price={3999}
-            originalPrice={7999}
+            price={7999}
+            originalPrice={15999}
             discount="50% OFF"
             features={withoutGuideFeatures}
             note="You need to arrange your own project guide/faculty mentor."
@@ -125,9 +125,9 @@ export const Services = () => {
           <MajorProjectCard
             title="Major Project (With Guide)"
             description="Complete Major Project Report + Professional Guide Arrangement + Viva Solutions + Plagiarism Report"
-            price={5999}
-            originalPrice={9499}
-            discount="37% OFF"
+            price={10999}
+            originalPrice={19999}
+            discount="45% OFF"
             features={withGuideFeatures}
             isWithGuide={true}
             isPremium={true}
