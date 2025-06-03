@@ -262,6 +262,6 @@ This project is proprietary software developed for EduElan's academic services p
 
 ---
 
-*Last Updated: December 2024*
+*Last Updated: June 2025*
 *Version: 2.0.0*
 *Maintainer: EduElan Development Team*
