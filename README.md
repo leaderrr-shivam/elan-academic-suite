@@ -110,7 +110,7 @@ Supabase (PostgreSQL + Edge Functions)
 ### **Quick Start**
 ```bash
 # 1. Clone the repository
-git clone <YOUR_GIT_URL>
+git clone https://github.com/leaderrr-shivam/elan-academic-suite.git
 cd <YOUR_PROJECT_NAME>
 
 # 2. Install dependencies
