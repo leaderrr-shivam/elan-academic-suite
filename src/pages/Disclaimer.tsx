@@ -29,9 +29,9 @@ const Disclaimer = () => {
             <div className="flex items-start gap-4">
               <AlertTriangle className="w-8 h-8 text-amber-600 mt-1 flex-shrink-0" />
               <div>
-                <h3 className="text-xl font-bold text-amber-900 mb-2">Important Notice</h3>
+                <h3 className="text-xl font-bold text-amber-900 mb-2">Portfolio Demonstration</h3>
                 <p className="text-amber-800 font-medium">
-                  EduElan is an independent service provider and is not affiliated with Amity University or any other educational institution.
+                  EduAssist Pro is a demonstration project built for portfolio purposes to showcase full-stack development capabilities and enterprise-level security implementation.
                 </p>
               </div>
             </div>
@@ -41,63 +41,58 @@ const Disclaimer = () => {
             <div className="prose prose-slate max-w-none">
               <h2 className="text-2xl font-bold text-slate-900 mb-4">General Disclaimer</h2>
               <p className="text-slate-700 mb-6">
-                The information contained on this website and the services provided by EduElan are for 
-                general information and educational assistance purposes only. While we strive to provide 
-                accurate and up-to-date information, we make no representations or warranties of any kind, 
-                express or implied, about the completeness, accuracy, reliability, suitability, or availability.
+                The information contained on this website and the services displayed by EduAssist Pro are for 
+                demonstration and portfolio purposes only. This is a showcase project designed to demonstrate 
+                technical capabilities in full-stack development, security implementation, and modern web technologies.
               </p>
 
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Educational Use</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Educational Demonstration</h2>
               <p className="text-slate-700 mb-6">
-                Our services are intended to be used as reference materials and study aids. Students are 
-                responsible for ensuring that their use of our materials complies with their institution's 
-                academic integrity policies and guidelines.
+                This platform serves as a demonstration of academic service platform development and is not 
+                intended for actual commercial use. All pricing, services, and features shown are simulated 
+                for demonstration purposes.
               </p>
 
               <h2 className="text-2xl font-bold text-slate-900 mb-4">No University Affiliation</h2>
               <p className="text-slate-700 mb-6">
-                EduElan is not affiliated with, endorsed by, or connected to Amity University Online, 
-                Amity University, or any other educational institution mentioned on this website. We are 
-                an independent service provider offering academic assistance.
+                EduAssist Pro is not affiliated with, endorsed by, or connected to any educational institution. 
+                This is an independent demonstration project showcasing technical development skills and 
+                enterprise-level application architecture.
               </p>
 
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">No Guarantee of Grades</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Technical Demonstration</h2>
               <p className="text-slate-700 mb-6">
-                While we provide high-quality academic assistance, we cannot guarantee specific grades, 
-                marks, or academic outcomes. Final evaluation and grading are entirely at the discretion 
-                of your educational institution and instructors.
+                This project demonstrates various technical concepts including but not limited to: React development, 
+                TypeScript implementation, Supabase integration, enterprise security measures, database design, 
+                authentication systems, and responsive web design.
               </p>
 
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Guide Arrangement</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Portfolio Purpose</h2>
               <p className="text-slate-700 mb-6">
-                For services that include guide arrangement, we facilitate connections with potential 
-                academic guides but cannot guarantee guide acceptance or availability. The final 
-                approval and working relationship with any guide is between the student and the guide.
+                This application has been developed as a portfolio piece to showcase full-stack development 
+                capabilities, security implementation, and modern web development practices to potential 
+                employers and collaborators.
               </p>
 
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Technical Issues</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">No Actual Services</h2>
               <p className="text-slate-700 mb-6">
-                We strive to maintain our website and services but cannot guarantee uninterrupted access. 
-                We are not liable for any technical issues, downtime, or data loss that may occur.
+                While the platform demonstrates a complete academic services marketplace, no actual academic 
+                services are provided. All content, pricing, and service descriptions are for demonstration 
+                purposes only.
               </p>
 
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">External Links</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Technical Architecture</h2>
               <p className="text-slate-700 mb-6">
-                Our website may contain links to external sites. We have no control over and assume no 
-                responsibility for the content, privacy policies, or practices of any third-party sites.
+                The platform showcases enterprise-grade security features, database design principles, 
+                user authentication, payment flow simulation, and administrative interfaces as technical 
+                demonstrations of development capabilities.
               </p>
 
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Changes to Services</h2>
-              <p className="text-slate-700 mb-6">
-                We reserve the right to modify, suspend, or discontinue any aspect of our services at 
-                any time without prior notice.
-              </p>
-
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Contact Us</h2>
+              <h2 className="text-2xl font-bold text-slate-900 mb-4">Contact Information</h2>
               <p className="text-slate-700">
-                If you have any questions about this disclaimer, please contact us:
+                For questions about this demonstration project or to discuss development opportunities:
                 <br />
-                Email: <a href="mailto:eduelandesk@gmail.com" className="text-blue-600 hover:text-blue-800">eduelandesk@gmail.com</a>
+                Email: <a href="mailto:demo@eduassistpro.com" className="text-blue-600 hover:text-blue-800">demo@eduassistpro.com</a>
               </p>
             </div>
           </div>

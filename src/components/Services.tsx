@@ -52,15 +52,15 @@ export const Services = () => {
 
   const withoutGuideFeatures = [
     "Complete Major Project Report (100-150 pages)",
-    "Strictly follows Amity University Online guidelines", 
+    "Follows standard university guidelines and formatting", 
     "Original, plagiarism-free content with proper citations",
     "Professional plagiarism report included for quality assurance",
-    "Professional formatting as per university standards",
+    "Academic formatting as per university standards",
     "Comprehensive viva questions and detailed answers",
     "Delivery in both .docx and .pdf formats",
     "Technical documentation and code (if applicable)",
     "Abstract, literature review, methodology & conclusion",
-    "Ready for submission to AMIGO LMS"
+    "Ready for submission to university portal"
   ];
 
   const withGuideFeatures = [
@@ -74,18 +74,18 @@ export const Services = () => {
     "All features from standard package included"
   ];
 
-  const gameDesignFeatures = [
-    "Formative Assessment 1 - 10/10 marks guaranteed",
-    "Formative Assessment 2 - 10/10 marks guaranteed", 
-    "Formative Assessment 3 - 10/10 marks guaranteed",
+  const dataAnalyticsFeatures = [
+    "Formative Assessment 1 - High-grade solution guaranteed",
+    "Formative Assessment 2 - High-grade solution guaranteed", 
+    "Formative Assessment 3 - High-grade solution guaranteed",
     "100% original content with plagiarism report",
     "Instant download after payment"
   ];
 
-  const designThinkingFeatures = [
-    "Formative Assessment 1 - 10/10 marks guaranteed",
-    "Formative Assessment 2 - 10/10 marks guaranteed",
-    "Formative Assessment 3 - 10/10 marks guaranteed", 
+  const softwareEngineeringFeatures = [
+    "Formative Assessment 1 - High-grade solution guaranteed",
+    "Formative Assessment 2 - High-grade solution guaranteed",
+    "Formative Assessment 3 - High-grade solution guaranteed", 
     "100% original content with plagiarism report",
     "Instant download after payment"
   ];
@@ -101,10 +101,10 @@ export const Services = () => {
             </span>
           </div>
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
-            Amity Online Final Year UG Major Project
+            University Final Year UG Major Project
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-12">
-            Get your complete Major Project Report professionally crafted by experts, following all Amity University Online guidelines with guaranteed submission success.
+            Get your complete Major Project Report professionally crafted by experts, following all university guidelines with guaranteed submission success.
           </p>
         </div>
 
@@ -139,33 +139,33 @@ export const Services = () => {
         {/* Assignment Packs Section */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
-            BCA Data Analytics - Semester 6 Assignment Packs
+            Computer Science - Final Semester Assignment Packs
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Complete assignment packs for Semester 6 subjects with guaranteed 10/10 marks on all assessments.
+            Complete assignment packs for final semester subjects with guaranteed high-grade assessments.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <AssignmentPackCard
-            title="Intelligent Game Design - Full Assignment Pack"
+            title="Data Analytics - Full Assignment Pack"
             description="Complete pack with all 3 assessments (FA1, FA2, FA3)"
             price={499}
             originalPrice={849}
             discount="41% OFF"
-            features={gameDesignFeatures}
+            features={dataAnalyticsFeatures}
             isPopular={true}
             onBuyNow={handleBuyNow}
             onAddToCart={handleAddToCart}
           />
 
           <AssignmentPackCard
-            title="Design Thinking - Full Assignment Pack"
+            title="Software Engineering - Full Assignment Pack"
             description="Complete pack with all 3 assessments (FA1, FA2, FA3)"
             price={499}
             originalPrice={849}
             discount="41% OFF"
-            features={designThinkingFeatures}
+            features={softwareEngineeringFeatures}
             onBuyNow={handleBuyNow}
             onAddToCart={handleAddToCart}
           />

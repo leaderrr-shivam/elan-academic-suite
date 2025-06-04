@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Users, Award, Clock, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -22,40 +23,44 @@ const About = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6">
-              About EduElan
+              About EduAssist Pro
             </h1>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Your trusted partner in academic excellence, dedicated to helping students achieve their educational goals
+              A demonstration of enterprise-grade academic platform development with cutting-edge security and modern web technologies
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-16">
             <div>
-              <h2 className="text-3xl font-bold text-slate-900 mb-6">Our Mission</h2>
+              <h2 className="text-3xl font-bold text-slate-900 mb-6">Project Mission</h2>
               <p className="text-lg text-slate-700 mb-6">
-                At EduElan, we believe that every student deserves access to quality academic support. Our mission is to provide comprehensive, reliable, and affordable academic assistance that helps students excel in their studies while maintaining the highest standards of integrity and quality.
+                EduAssist Pro serves as a comprehensive demonstration of full-stack development capabilities, showcasing 
+                the creation of a sophisticated academic services platform with enterprise-level security, modern UI/UX 
+                design, and robust backend architecture.
               </p>
               <p className="text-lg text-slate-700 mb-6">
-                We understand the challenges students face in today's competitive academic environment. That's why we've built a platform that combines expert knowledge, cutting-edge technology, and personalized support to deliver exceptional results.
+                This portfolio project demonstrates proficiency in React, TypeScript, Supabase, and advanced security 
+                implementation, representing the kind of high-quality, scalable applications that can be delivered 
+                for real-world business needs.
               </p>
               <Button 
                 onClick={handleGetStarted}
                 className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white px-8 py-3 rounded-xl hover:shadow-lg transition-all duration-300"
               >
-                Get Started Today
+                Explore Demo Features
               </Button>
             </div>
 
             <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200">
-              <h3 className="text-2xl font-bold text-slate-900 mb-6">Why Choose Us?</h3>
+              <h3 className="text-2xl font-bold text-slate-900 mb-6">Technical Highlights</h3>
               <ul className="space-y-4">
                 <li className="flex items-start">
                   <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center mr-4 mt-1">
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-slate-900">Expert Team</h4>
-                    <p className="text-slate-600">Qualified professionals with advanced degrees and industry experience</p>
+                    <h4 className="font-semibold text-slate-900">Full-Stack Architecture</h4>
+                    <p className="text-slate-600">Complete React + TypeScript + Supabase implementation</p>
                   </div>
                 </li>
                 <li className="flex items-start">
@@ -63,8 +68,8 @@ const About = () => {
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-slate-900">Quality Assurance</h4>
-                    <p className="text-slate-600">Rigorous quality checks and plagiarism-free guarantee</p>
+                    <h4 className="font-semibold text-slate-900">Enterprise Security</h4>
+                    <p className="text-slate-600">Advanced encryption, RLS policies, and threat prevention</p>
                   </div>
                 </li>
                 <li className="flex items-start">
@@ -72,8 +77,8 @@ const About = () => {
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-slate-900">Timely Delivery</h4>
-                    <p className="text-slate-600">Always on time, with rush options available for urgent needs</p>
+                    <h4 className="font-semibold text-slate-900">Modern UI/UX</h4>
+                    <p className="text-slate-600">Responsive design with shadcn/ui and Tailwind CSS</p>
                   </div>
                 </li>
                 <li className="flex items-start">
@@ -81,8 +86,8 @@ const About = () => {
                     <div className="w-2 h-2 bg-white rounded-full"></div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-slate-900">24/7 Support</h4>
-                    <p className="text-slate-600">Round-the-clock customer support for all your queries</p>
+                    <h4 className="font-semibold text-slate-900">Database Design</h4>
+                    <p className="text-slate-600">Normalized schema with proper relationships and RLS</p>
                   </div>
                 </li>
               </ul>
@@ -97,6 +102,19 @@ const About = () => {
                 <div className="text-slate-600">{stat.label}</div>
               </div>
             ))}
+          </div>
+
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-slate-200 text-center">
+            <h3 className="text-2xl font-bold text-slate-900 mb-4">Portfolio Demonstration</h3>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto mb-6">
+              This project showcases the ability to create production-ready applications with enterprise-level 
+              features including user authentication, secure payment flows, administrative dashboards, real-time 
+              updates, and comprehensive security measures.
+            </p>
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-800 text-sm font-medium">
+              <Shield className="w-4 h-4 mr-2" />
+              Built with Modern Technologies & Best Practices
+            </div>
           </div>
         </div>
       </div>
